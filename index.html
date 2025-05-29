@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>apps and website source code </title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <style>
+        :root {
+            --primary-color: #00b8d4; /* Refined Cyan/Teal */
+            --secondary-color: #c51162; /* Refined Magenta */
+            --background-color: #0f172a; /* Deep Slate Blue */
+            --card-background: #1e293b; /* Darker Slate Blue for Cards */
+            --glass-background: rgba(30, 41, 59, 0.8); /* Slightly transparent card bg for modals */
+            --text-color: #e2e8f0; /* Light Gray/Off-white */
+            --text-muted-color: #94a3b8; /* Muted text for descriptions */
+            --glow-color-primary: rgba(0, 184, 212, 0.5);
+            --glow-color-secondary: rgba(197, 17, 98, 0.5);
+            --border-color: rgba(0, 184, 212, 0.25);
+            --input-bg: rgba(255, 255, 255, 0.07);
+            --premium-gold: #ffc107;
+            --support-btn-bg: #25D366; /* WhatsApp Green, good for support */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at top left, rgba(0, 184, 212, 0.05), transparent 30%),
+                              radial-gradient(circle at bottom right, rgba(197, 17, 98, 0.05), transparent 30%);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px 0;
+        }
+
+        header {
+            background: rgba(15, 23, 42, 0.7); 
+            backdrop-filter: blur(12px);
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        .logo {
+            font-size: 2rem;
+            font-weight: 700; 
+            color: var(--primary-color);
+            text-shadow: 0 0 10px var(--glow-color-primary);
+            letter-spacing: 1px;
+        }
+        nav button, nav a.btn { margin-left: 10px; margin-top: 5px; margin-bottom: 5px; text-decoration: none; }
+
+        .btn {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            padding: 0.75rem 1.5rem; 
+            border-radius: 8px; 
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.25s ease-in-out;
+            box-shadow: 0 0 6px var(--glow-color-primary), inset 0 0 4px rgba(0,184,212,0.3);
+        }
+        .btn:hover:not(:disabled) {
+            background: var(--primary-color);
+            color: var(--background-color);
+            box-shadow: 0 0 15px var(--glow-color-primary), 0 0 25px var(--glow-color-primary);
+            transform: translateY(-3px) scale(1.02);
+        }
+        .btn-secondary {
+            color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 6px var(--glow-color-secondary), inset 0 0 4px rgba(197,17,98,0.3);
+        }
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--secondary-color);
+            color: var(--background-color);
+            box-shadow: 0 0 15px var(--glow-color-secondary), 0 0 25px var(--glow-color-secondary);
+        }
+        .btn-support {
+            background-color: var(--support-btn-bg);
+            border-color: var(--support-btn-bg);
+            color: white;
+             box-shadow: 0 0 6px rgba(37, 211, 102, 0.5), inset 0 0 4px rgba(37,211,102,0.3);
+        }
+        .btn-support:hover:not(:disabled) {
+            background-color: #1DAE52; 
+            border-color: #1DAE52;
+            color: white;
+            box-shadow: 0 0 15px rgba(37, 211, 102, 0.5), 0 0 25px rgba(37, 211, 102, 0.5);
+        }
+
+        .btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+            border-color: #4b5563; 
+            color: #9ca3af; 
+            box-shadow: none;
+        }
+         .btn:disabled:hover {
+            background: transparent;
+            transform: none;
+        }
+
+
+        .hero { text-align: center; padding: 6rem 0 4rem; }
+        .hero h1 {
+            font-size: 3.2rem;
+            margin-bottom: 1.2rem;
+            color: var(--text-color);
+            font-weight: 700;
+        }
+        .hero h1 .highlight {
+            color: var(--primary-color);
+            text-shadow: 0 0 12px var(--glow-color-primary);
+        }
+        .hero p { font-size: 1.25rem; color: var(--text-muted-color); opacity: 0.9; max-width: 700px; margin: 0 auto;}
+
+        #codeListingsSection h2, #userDashboard h2, #myCodesPage h2, #codeDetailsModal h2 {
+            text-align: center;
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-bottom: 2.5rem;
+            font-weight: 600;
+            text-shadow: 0 0 8px var(--glow-color-primary);
+        }
+        #codeDetailsModal h2 { font-size: 1.8rem; margin-bottom: 1.5rem;}
+
+
+        #codeListings, #myCodesList {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .code-card {
+            background: var(--card-background);
+            border: 1px solid var(--border-color);
+            border-radius: 12px; 
+            padding: 1.75rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25), 0 0 0px var(--glow-color-primary) inset;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative; 
+        }
+        .code-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3), 0 0 10px var(--glow-color-primary);
+        }
+        .code-card img.screenshot {
+            width: 100%;
+            height: 180px; 
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1.2rem;
+            border: 1px solid var(--border-color);
+        }
+        .code-card h3 {
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+            display: flex; 
+            align-items: center; 
+            flex-wrap: wrap; 
+        }
+        .premium-badge {
+            background: linear-gradient(45deg, var(--premium-gold), #ffab00);
+            color: #121212; 
+            padding: 0.25em 0.7em;
+            font-size: 0.7rem;
+            font-weight: bold;
+            border-radius: 4px;
+            margin-left: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            line-height: 1.2;
+        }
+
+        .code-card p.description { font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-muted-color); flex-grow: 1; min-height: 50px;}
+        .code-card .price { font-size: 1.4rem; font-weight: bold; color: var(--secondary-color); margin-bottom: 1.2rem; text-shadow: 0 0 6px var(--glow-color-secondary); }
+        .code-card .btn, .code-card a.btn { width: 100%; text-align: center; }
+
+        /* Modals */
+        .modal {
+            display: none; position: fixed; z-index: 1001;
+            left: 0; top: 0; width: 100%; height: 100%;
+            overflow: auto; background-color: rgba(10, 15, 30, 0.85);
+            backdrop-filter: blur(10px);
+            animation: fadeInModalBg 0.3s ease-out;
+        }
+        @keyframes fadeInModalBg { from { opacity:0; } to { opacity:1; }}
+        .modal-content {
+            background: var(--glass-background);
+            margin: 7% auto; padding: 35px;
+            border: 1px solid var(--border-color);
+            border-radius: 15px; width: 90%; max-width: 480px;
+            box-shadow: 0 0 35px var(--glow-color-secondary), 0 0 20px var(--border-color) inset;
+            animation: scaleUpModal 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+        #codeDetailsModal .modal-content { max-width: 750px; } 
+
+        @keyframes scaleUpModal {
+            from { opacity: 0; transform: scale(0.8) translateY(25px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .modal-content input[type="email"],
+        .modal-content input[type="password"],
+        .modal-content input[type="text"],
+        .modal-content input[type="number"] {
+            width: 100%; padding: 15px; margin-bottom: 1.3rem;
+            border-radius: 8px; border: 1px solid var(--border-color);
+            background-color: var(--input-bg); color: var(--text-color); font-size: 1rem;
+            transition: box-shadow 0.3s, border-color 0.3s;
+        }
+        .modal-content input:focus {
+            outline: none; border-color: var(--primary-color);
+            box-shadow: 0 0 10px var(--glow-color-primary);
+        }
+        .close-btn {
+            color: var(--text-muted-color); float: right; font-size: 30px;
+            font-weight: bold; cursor: pointer; position: absolute; top: 18px; right: 22px;
+            transition: color 0.3s, transform 0.3s;
+        }
+        .close-btn:hover, .close-btn:focus { color: var(--primary-color); transform: rotate(180deg) scale(1.1); }
+        
+        #paymentQrCodeImg {
+            display: block; margin: 1.2rem auto 1.8rem; width: 170px; height: 170px;
+            border: 3px solid var(--primary-color); border-radius: 10px;
+            box-shadow: 0 0 15px var(--glow-color-primary); background-color: white; 
+        }
+        #paymentModal p { text-align: center; margin-bottom: 0.6rem; font-size: 1.05rem; }
+
+        /* Code Details Modal Specifics */
+        #codeDetailsScreenshotsContainer { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; justify-content: center;}
+        #codeDetailsScreenshotsContainer img {
+            width: calc(33.333% - 10px); 
+            max-height: 180px;
+            object-fit: cover; 
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer; transition: transform 0.2s;
+        }
+         #codeDetailsScreenshotsContainer img:hover { transform: scale(1.05); }
+        @media (max-width: 600px) {
+            #codeDetailsScreenshotsContainer img { width: calc(50% - 5px); } 
+        }
+         @media (max-width: 400px) {
+            #codeDetailsScreenshotsContainer img { width: 100%; } 
+        }
+
+        #codeDetailsDownloadsList { list-style: none; padding: 0; }
+        #codeDetailsDownloadsList li { margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 5px;}
+        #codeDetailsDownloadsList li span { color: var(--text-muted-color); }
+        #codeDetailsDownloadsList li .btn { padding: 0.5rem 1rem; font-size: 0.85rem; }
+
+        #codeDetailsDescriptionContent { color: var(--text-color); line-height: 1.7; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 5px; word-wrap: break-word;}
+        #codeDetailsDescriptionContent strong, #codeDetailsDescriptionContent mark { color: var(--primary-color); background-color: rgba(0, 184, 212, 0.1); padding: 0.1em 0.3em; border-radius: 3px;}
+        #codeDetailsDescriptionContent mark { background-color: rgba(255, 193, 7, 0.2); color: var(--premium-gold); }
+
+
+        /* User Dashboard & My Codes */
+        #userDashboard, #myCodesPage { padding: 2rem 0; }
+        .requested-code-item, .purchased-code-item {
+            background: var(--card-background); border: 1px solid var(--border-color);
+            border-radius: 10px; padding: 1.5rem; margin-bottom: 1.5rem;
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .requested-code-item:hover, .purchased-code-item:hover { transform: translateX(6px); box-shadow: 0 8px 25px rgba(0,0,0,0.25); }
+        .requested-code-item p, .purchased-code-item p { margin: 0.4rem 0; font-size: 0.95rem;}
+        .requested-code-item p strong, .purchased-code-item p strong { color: var(--primary-color); font-weight: 600;}
+
+        .status-label { padding: 0.4rem 0.9rem; border-radius: 6px; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; }
+        .status-pending { background-color: #ffc107; color: #212529; box-shadow: 0 0 8px #ffc107aa; }
+        .status-approved { background-color: #198754; color: white; box-shadow: 0 0 8px #198754aa; }
+        .status-rejected { background-color: #dc3545; color: white; box-shadow: 0 0 8px #dc3545aa; }
+
+        .purchased-code-item .btn, .purchased-code-item a.btn { min-width: 130px; text-align:center; }
+
+        .hidden { display: none !important; }
+        .text-center { text-align: center; }
+        .mt-1 { margin-top: 1rem; }
+
+        .loader-container { display: flex; justify-content: center; align-items: center; padding: 2.5rem; }
+        
+        #alertContainer {
+            position: fixed; top: 85px; left: 50%; transform: translateX(-50%);
+            z-index: 2000; width: 90%; max-width: 480px;
+        }
+        .alert {
+            padding: 1.25rem; margin-bottom: 1.1rem; border-radius: 8px;
+            text-align: center; font-weight: 600; color: var(--background-color);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+            animation: slideDownFadeOut 3.8s forwards;
+        }
+        .alert-success { background: linear-gradient(45deg, var(--primary-color), #00a1b6); border-left: 5px solid #007c8c; }
+        .alert-error { background: linear-gradient(45deg, var(--secondary-color), #a80d50); border-left: 5px solid #80003c; }
+        
+        @keyframes slideDownFadeOut {
+            0% { opacity: 0; transform: translateY(-25px) translateX(-50%); }
+            10% { opacity: 1; transform: translateY(0) translateX(-50%); }
+            90% { opacity: 1; transform: translateY(0) translateX(-50%); }
+            100% { opacity: 0; transform: translateY(25px) translateX(-50%); display:none; }
+        }
+        #alertContainer .alert { 
+            position: relative;
+            left: 50%; 
+            transform: translateX(-50%) translateY(0); 
+        }
+
+        footer {
+            text-align: center; padding: 2.8rem 0; margin-top: 3.5rem;
+            border-top: 1px solid var(--border-color); color: var(--text-muted-color);
+            font-size: 0.85rem;
+        }
+        .footer-support-btn-container { margin-top: 1rem; }
+        
+        .ad-placeholder {
+            width: 100%;
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.6rem; } .hero p { font-size: 1.1rem; }
+            header .container { flex-direction: column; align-items: flex-start; }
+            .logo { margin-bottom: 0.5rem; }
+            nav { margin-top: 10px; width: 100%; display: flex; flex-wrap: wrap; justify-content: flex-start;} 
+            nav button, nav a.btn { margin: 5px 8px 5px 0; }
+            .modal-content { margin: 12% auto; width: 95%; }
+            #codeListings, #myCodesList { grid-template-columns: 1fr; gap: 1.5rem; }
+            .requested-code-item, .purchased-code-item { flex-direction: column; align-items: flex-start; }
+            .requested-code-item div:last-child, .purchased-code-item div:last-child { margin-top: 1rem; width:100%;}
+            .requested-code-item .btn, .purchased-code-item .btn, 
+            .requested-code-item a.btn, .purchased-code-item a.btn { width: 100%; }
+             #codeDetailsModal .modal-content { margin: 10% auto; }
+        }
+        @media (max-width: 480px) {
+            .logo { font-size: 1.7rem; }
+            .btn { padding: 0.65rem 1.3rem; font-size: 0.85rem; }
+            .modal-content { padding: 25px; }
+            .modal-content h2 { font-size: 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+    <div id="alertContainer"></div>
+
+    <header>
+        <div class="container">
+            <div class="logo">THE CODE DEPOT</div>
+            <nav>
+                <button id="homeBtn" class="btn">Home</button>
+                <button id="myCodesBtn" class="btn hidden">My Codes</button>
+                <button id="dashboardBtn" class="btn hidden">My Requests</button>
+                <button id="loginBtn" class="btn">Login</button>
+                <button id="signupBtn" class="btn btn-secondary">Sign Up</button>
+                <button id="logoutBtn" class="btn btn-secondary hidden">Logout</button>
+            </nav>
+        </div>
+    </header>
+    
+    <div id="adBannerTopContainer" class="ad-placeholder"></div>
+
+    <main id="mainContentContainer">
+        <div id="homePage" class="container">
+            <section class="hero">
+                <h1>Discover & <span class="highlight">Unlock</span><br>Premium Source Codes</h1>
+                <p>Your gateway to high-quality apps, games, and website templates.</p>
+            </section>
+
+            <section id="codeListingsSection">
+                <h2>Available Codes</h2>
+                <div id="codeListingsLoader" class="loader-container">
+                    <lottie-player src="https://assets3.lottiefiles.com/packages/lf20_p8bfn5to.json" background="transparent" speed="1" style="width: 150px; height: 150px;" loop autoplay></lottie-player>
+                </div>
+                <div id="codeListings"></div>
+            </section>
+        </div>
+
+        <section id="userDashboard" class="container hidden">
+            <h2>My Payment Requests</h2>
+            <div id="userRequestsLoader" class="loader-container hidden">
+                <lottie-player src="https://assets3.lottiefiles.com/packages/lf20_p8bfn5to.json" background="transparent" speed="1" style="width: 120px; height: 120px;" loop autoplay></lottie-player>
+            </div>
+            <div id="userRequestsList"></div>
+        </section>
+
+        <section id="myCodesPage" class="container hidden">
+            <h2>My Purchased Codes</h2>
+            <div id="myCodesLoader" class="loader-container hidden">
+                <lottie-player src="https://assets3.lottiefiles.com/packages/lf20_p8bfn5to.json" background="transparent" speed="1" style="width: 120px; height: 120px;" loop autoplay></lottie-player>
+            </div>
+            <div id="myCodesList"></div>
+        </section>
+    </main>
+
+    <div id="adBannerBottomContainer" class="ad-placeholder"></div>
+    <div id="adPopupContainer"></div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('loginModal')">×</span>
+            <h2>Login</h2>
+            <form id="loginForm">
+                <input type="email" id="loginEmail" placeholder="Email Address" required>
+                <input type="password" id="loginPassword" placeholder="Password" required>
+                <button type="submit" class="btn" style="width:100%;">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('signupModal')">×</span>
+            <h2>Create Account</h2>
+            <form id="signupForm">
+                <input type="email" id="signupEmail" placeholder="Email Address" required>
+                <input type="password" id="signupPassword" placeholder="Password (min 6 characters)" required>
+                <button type="submit" class="btn btn-secondary" style="width:100%;">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('paymentModal')">×</span>
+            <h2>Payment Request</h2>
+            <p>Scan QR to pay: <strong id="paymentAmount"></strong></p>
+            <img id="paymentQrCodeImg" src="https://i.postimg.cc/26jqrLCh/IMG-20250529-094357.png" alt="Payment QR Code">
+            <p style="font-size:0.9em; color: var(--text-muted-color);">After payment, enter the UTR/Transaction ID below.</p>
+            <form id="paymentForm">
+                <input type="text" id="utrNumber" placeholder="Enter UTR Number" required>
+                <input type="hidden" id="paymentCodeId">
+                <button type="submit" class="btn" style="width:100%;">Submit Payment Request</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Code Details Modal -->
+    <div id="codeDetailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('codeDetailsModal')">×</span>
+            <h2 id="codeDetailsTitle">Code Details</h2>
+            <div id="codeDetailsScreenshotsSection">
+                <h4 style="color: var(--text-muted-color); margin-bottom: 10px; font-weight:500;">Screenshots:</h4>
+                <div id="codeDetailsScreenshotsContainer"></div>
+            </div>
+            <div id="codeDetailsDownloadsSection" style="margin-top:20px;">
+                <h4 style="color: var(--text-muted-color); margin-bottom: 10px; font-weight:500;">Download Files:</h4>
+                <ul id="codeDetailsDownloadsList"></ul>
+            </div>
+            <div id="codeDetailsDescriptionSection" style="margin-top:20px;">
+                <h4 style="color: var(--text-muted-color); margin-bottom: 10px; font-weight:500;">Description:</h4>
+                <div id="codeDetailsDescriptionContent"></div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2025 Dilshad Ansari. All Rights Reserved. Designed with <span style="color: var(--secondary-color); font-size: 1.2em;">♥</span>.</p>
+        <div class="footer-support-btn-container">
+            <a href="#" id="footerSupportLink" target="_blank" class="btn btn-support hidden" style="padding: 0.5rem 1rem; font-size: 0.85rem;">Contact Support</a>
+        </div>
+    </footer>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCA3MAJDiylUVVTl236AljcH2DxEHbh6ds",
+            authDomain: "dragon-versus-tiger.firebaseapp.com",
+            databaseURL: "https://dragon-versus-tiger-default-rtdb.firebaseio.com",
+            projectId: "dragon-versus-tiger",
+            storageBucket: "dragon-versus-tiger.appspot.com", 
+            messagingSenderId: "41405330873",
+            appId: "1:41405330873:web:bb56834a896a565c51b268",
+            measurementId: "G-X9E49MH88V" 
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        const App = (() => {
+            const homeBtn = document.getElementById('homeBtn');
+            const loginBtn = document.getElementById('loginBtn');
+            const signupBtn = document.getElementById('signupBtn');
+            const dashboardBtn = document.getElementById('dashboardBtn');
+            const myCodesBtn = document.getElementById('myCodesBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            
+            const homePage = document.getElementById('homePage');
+            const userDashboard = document.getElementById('userDashboard');
+            const myCodesPage = document.getElementById('myCodesPage');
+            
+            const loginModalEl = document.getElementById('loginModal');
+            const signupModalEl = document.getElementById('signupModal');
+            const paymentModalEl = document.getElementById('paymentModal');
+            const codeDetailsModalEl = document.getElementById('codeDetailsModal'); 
+
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            const paymentForm = document.getElementById('paymentForm');
+
+            const codeListingsDiv = document.getElementById('codeListings');
+            const codeListingsLoader = document.getElementById('codeListingsLoader');
+            const userRequestsListDiv = document.getElementById('userRequestsList');
+            const userRequestsLoader = document.getElementById('userRequestsLoader');
+            const myCodesListDiv = document.getElementById('myCodesList');
+            const myCodesLoader = document.getElementById('myCodesLoader');
+            
+            const alertContainer = document.getElementById('alertContainer');
+            const footerSupportLink = document.getElementById('footerSupportLink');
+
+            const adBannerTopContainer = document.getElementById('adBannerTopContainer');
+            const adBannerBottomContainer = document.getElementById('adBannerBottomContainer');
+            const adPopupContainer = document.getElementById('adPopupContainer');
+            
+            let allCodesMap = {}; 
+            let currentUserApprovedCodeIds = new Set(); 
+            let telegramSupportLink = "https://t.me/D_24lottery_customer_support"; 
+            let adSettings = {};
+
+            const show = el => el.classList.remove('hidden');
+            const hide = el => el.classList.add('hidden');
+
+            function showAlert(message, type = 'success') {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `alert alert-${type}`;
+                alertDiv.textContent = message;
+                if (alertContainer.firstChild) {
+                    alertContainer.insertBefore(alertDiv, alertContainer.firstChild);
+                } else {
+                    alertContainer.appendChild(alertDiv);
+                }
+                setTimeout(() => {
+                    alertDiv.style.opacity = '0'; 
+                    setTimeout(() => alertDiv.remove(), 500); 
+                }, 3300); 
+            }
+            
+            window.openModal = (modalId) => document.getElementById(modalId).style.display = 'block';
+            window.closeModal = (modalId) => {
+                const modal = document.getElementById(modalId);
+                modal.style.animation = 'scaleDownModal 0.3s forwards';
+                 setTimeout(() => {
+                    modal.style.display = 'none';
+                    modal.style.animation = ''; 
+                 }, 300); 
+            };
+
+            async function fetchConfigSettings() {
+                try {
+                    const generalSettingsDoc = await db.collection('config').doc('general_settings').get();
+                    if (generalSettingsDoc.exists && generalSettingsDoc.data().telegramSupportLink) {
+                        telegramSupportLink = generalSettingsDoc.data().telegramSupportLink;
+                        footerSupportLink.href = telegramSupportLink;
+                        show(footerSupportLink);
+                    } else {
+                         footerSupportLink.href = "https://t.me/D_24lottery_customer_support"; 
+                         show(footerSupportLink); 
+                         console.warn("Telegram support link not configured in Firestore. Using default.");
+                    }
+
+                    const adsSettingsDoc = await db.collection('config').doc('ads_settings').get();
+                    if (adsSettingsDoc.exists) {
+                        adSettings = adsSettingsDoc.data();
+                        displayAds();
+                    }
+                } catch (error) {
+                    console.error("Error fetching config settings:", error);
+                }
+            }
+
+            function displayAds() {
+                if (adSettings.bannerAdCodeTop && adBannerTopContainer) {
+                    adBannerTopContainer.innerHTML = adSettings.bannerAdCodeTop;
+                    executeScriptsInElement(adBannerTopContainer);
+                }
+                if (adSettings.bannerAdCodeBottom && adBannerBottomContainer) {
+                    adBannerBottomContainer.innerHTML = adSettings.bannerAdCodeBottom;
+                    executeScriptsInElement(adBannerBottomContainer);
+                }
+                if (adSettings.popUpAdCode && adPopupContainer) {
+                    adPopupContainer.innerHTML = adSettings.popUpAdCode;
+                    executeScriptsInElement(adPopupContainer);
+                }
+            }
+            
+            function executeScriptsInElement(element) {
+                const scripts = element.getElementsByTagName('script');
+                for (let i = 0; i < scripts.length; i++) {
+                    const script = scripts[i];
+                    const newScript = document.createElement('script');
+                    if (script.src) {
+                        newScript.src = script.src;
+                    } else {
+                        newScript.textContent = script.textContent;
+                    }
+                    if (script.type) {
+                        newScript.type = script.type;
+                    }
+                    document.head.appendChild(newScript).parentNode.removeChild(newScript);
+                }
+            }
+
+            async function ensureUserDocument(user) {
+                if (!user) return;
+                const userRef = db.collection('users').doc(user.uid);
+                try {
+                    const userDoc = await userRef.get();
+                    if (!userDoc.exists) {
+                        await userRef.set({
+                            uid: user.uid,
+                            email: user.email,
+                            isBanned: false,
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                    }
+                } catch (error) {
+                    console.error("Error ensuring user document:", error);
+                }
+            }
+
+            async function checkUserBanStatus(userId) {
+                if (!userId) return false;
+                try {
+                    const userDoc = await db.collection('users').doc(userId).get();
+                    if (userDoc.exists && userDoc.data().isBanned === true) {
+                        return true; 
+                    }
+                    return false;
+                } catch (error) {
+                    console.error("Error checking ban status:", error);
+                    return false; 
+                }
+            }
+
+            auth.onAuthStateChanged(async user => {
+                if (user) {
+                    const isBanned = await checkUserBanStatus(user.uid);
+                    if (isBanned) {
+                        showAlert("Your account has been suspended. Please contact support.", 'error');
+                        auth.signOut(); 
+                        return; 
+                    }
+
+                    await ensureUserDocument(user); 
+                    hide(loginBtn); hide(signupBtn);
+                    show(dashboardBtn); show(myCodesBtn); show(logoutBtn);
+                    await updateUserApprovedCodes(user.uid);
+                    
+                    if (!homePage.classList.contains('hidden')) {
+                        await fetchCodes();
+                    } else if (!userDashboard.classList.contains('hidden')) {
+                        fetchUserRequests(user.uid);
+                    } else if (!myCodesPage.classList.contains('hidden')) {
+                        fetchMyPurchasedCodes(user.uid);
+                    }
+                } else {
+                    show(loginBtn); show(signupBtn);
+                    hide(dashboardBtn); hide(myCodesBtn); hide(logoutBtn);
+                    currentUserApprovedCodeIds.clear();
+                    if (!homePage.classList.contains('hidden') || 
+                        document.getElementById('mainContentContainer').offsetParent === null) {
+                         switchToHomeView(); 
+                    }
+                    userRequestsListDiv.innerHTML = '';
+                    myCodesListDiv.innerHTML = '';
+                }
+            });
+
+            async function updateUserApprovedCodes(userId) {
+                currentUserApprovedCodeIds.clear();
+                if (!userId) return;
+                try {
+                    const requestsSnapshot = await db.collection('requests')
+                        .where('userId', '==', userId)
+                        .where('status', '==', 'approved')
+                        .get();
+                    requestsSnapshot.forEach(doc => {
+                        currentUserApprovedCodeIds.add(doc.data().codeId);
+                    });
+                } catch (error) {
+                    console.error("Error fetching user's approved codes:", error);
+                    if (error.message && error.message.toLowerCase().includes("index")) {
+                         showAlert("Database error (missing index) while checking approved codes. Error: " + error.message, 'error');
+                    }
+                }
+            }
+
+            function switchToHomeView() {
+                show(homePage);
+                hide(userDashboard);
+                hide(myCodesPage);
+                fetchCodes(); 
+            }
+
+            function switchToDashboardView() {
+                hide(homePage);
+                show(userDashboard);
+                hide(myCodesPage);
+                const currentUser = auth.currentUser;
+                if (currentUser) fetchUserRequests(currentUser.uid);
+                else userRequestsListDiv.innerHTML = '<p class="text-center">Please log in to see your requests.</p>';
+            }
+
+            function switchToMyCodesView() {
+                hide(homePage);
+                hide(userDashboard);
+                show(myCodesPage);
+                const currentUser = auth.currentUser;
+                if (currentUser) fetchMyPurchasedCodes(currentUser.uid);
+                else myCodesListDiv.innerHTML = '<p class="text-center">Please log in to see your purchased codes.</p>';
+            }
+
+            homeBtn.addEventListener('click', switchToHomeView);
+            loginBtn.addEventListener('click', () => openModal('loginModal'));
+            signupBtn.addEventListener('click', () => openModal('signupModal'));
+            dashboardBtn.addEventListener('click', switchToDashboardView);
+            myCodesBtn.addEventListener('click', switchToMyCodesView); 
+
+            logoutBtn.addEventListener('click', () => {
+                auth.signOut().then(() => showAlert("Logged out successfully."));
+            });
+
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+                try {
+                    await auth.signInWithEmailAndPassword(email, password);
+                    closeModal('loginModal');
+                    showAlert("Logged in successfully!");
+                    loginForm.reset();
+                } catch (error) { showAlert(`Login failed: ${error.message}`, 'error'); }
+            });
+
+            signupForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('signupEmail').value;
+                const password = document.getElementById('signupPassword').value;
+                try {
+                    await auth.createUserWithEmailAndPassword(email, password);
+                    closeModal('signupModal');
+                    showAlert("Signed up successfully! You are now logged in.");
+                    signupForm.reset();
+                } catch (error) { showAlert(`Signup failed: ${error.message}`, 'error'); }
+            });
+
+            paymentForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const user = auth.currentUser;
+                if (!user) { showAlert("Please login to submit a request.", 'error'); return; }
+                
+                const isBanned = await checkUserBanStatus(user.uid);
+                if (isBanned) {
+                    showAlert("Your account is suspended. Cannot submit payment request.", 'error');
+                    auth.signOut();
+                    return;
+                }
+
+                const utrNumber = document.getElementById('utrNumber').value;
+                const codeId = document.getElementById('paymentCodeId').value;
+
+                if (!utrNumber.trim()) { showAlert("UTR number is required.", 'error'); return; }
+
+                try {
+                    await db.collection('requests').add({
+                        userId: user.uid,
+                        userEmail: user.email, 
+                        codeId: codeId,
+                        utrNumber: utrNumber,
+                        status: 'pending', 
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    await ensureUserDocument(user); 
+                    closeModal('paymentModal');
+                    showAlert("Payment request submitted! It will be reviewed.");
+                    paymentForm.reset();
+                    if (!userDashboard.classList.contains('hidden')) {
+                        fetchUserRequests(user.uid);
+                    } else {
+                        switchToDashboardView();
+                    }
+                } catch (error) { showAlert(`Request submission failed: ${error.message}`, 'error'); }
+            });
+
+            async function fetchCodes() {
+                show(codeListingsLoader);
+                hide(codeListingsDiv);
+                codeListingsDiv.innerHTML = ''; 
+                try {
+                    const snapshot = await db.collection('codes').orderBy('timestamp', 'desc').get();
+                    allCodesMap = {}; 
+                    
+                    if(snapshot.empty){
+                         codeListingsDiv.innerHTML = '<p class="text-center" style="grid-column: 1 / -1;">No codes available yet. Check back soon!</p>';
+                    } else {
+                        snapshot.forEach(doc => {
+                            const code = doc.data();
+                            code.id = doc.id;
+                            allCodesMap[doc.id] = code; 
+
+                            const card = document.createElement('div');
+                            card.className = 'code-card';
+                           
+                            let buttonHtml = '';
+                            if (auth.currentUser && currentUserApprovedCodeIds.has(code.id)) {
+                                buttonHtml = `<button class="btn btn-secondary check-code-btn" data-id="${code.id}">Check Code</button>`;
+                            } else {
+                                buttonHtml = `<button class="btn get-code-btn" data-id="${code.id}" data-price="${code.price}">Get Code</button>`;
+                            }
+
+                            let premiumBadgeHtml = '';
+                            if (code.isPremium) {
+                                premiumBadgeHtml = '<span class="premium-badge">Premium</span>';
+                            }
+                            
+                            let cardScreenshotUrl = 'https://via.placeholder.com/350x180.png?text=Screenshot+N/A';
+                            if (code.screenshots && code.screenshots.length > 0 && code.screenshots[0]) {
+                                cardScreenshotUrl = code.screenshots[0];
+                            } else if (code.screenshotURL) { 
+                                cardScreenshotUrl = code.screenshotURL;
+                            }
+
+                            card.innerHTML = `
+                                <div>
+                                    <img src="${cardScreenshotUrl}" alt="${code.title} Screenshot" class="screenshot">
+                                    <h3>${code.title} ${premiumBadgeHtml}</h3>
+                                    <p class="description">${code.description ? (code.description.substring(0,120) + (code.description.length > 120 ? '...' : '')) : 'No description available.'}</p>
+                                    <div class="price">₹${code.price}</div>
+                                </div>
+                                <div class="mt-1">
+                                    ${buttonHtml}
+                                </div>
+                            `;
+                            codeListingsDiv.appendChild(card);
+                        });
+
+                        document.querySelectorAll('.get-code-btn').forEach(button => {
+                            button.addEventListener('click', async function() {
+                                if (!auth.currentUser) {
+                                    showAlert("Please login to get code.", 'error');
+                                    openModal('loginModal'); return;
+                                }
+                                const isBanned = await checkUserBanStatus(auth.currentUser.uid);
+                                if (isBanned) {
+                                    showAlert("Your account is suspended. Cannot get code.", 'error');
+                                    auth.signOut();
+                                    return;
+                                }
+                                const codeId = this.dataset.id;
+                                const price = this.dataset.price;
+                                document.getElementById('paymentAmount').textContent = `₹${price}`;
+                                document.getElementById('paymentCodeId').value = codeId;
+                                openModal('paymentModal');
+                            });
+                        });
+                        document.querySelectorAll('.check-code-btn').forEach(button => {
+                             button.addEventListener('click', function() {
+                                openCodeDetailsModal(this.dataset.id);
+                            });
+                        });
+                    }
+                } catch (error) {
+                    showAlert("Failed to load codes. " + error.message, 'error');
+                    codeListingsDiv.innerHTML = '<p class="text-center" style="grid-column: 1 / -1;">Error loading codes. Please refresh.</p>';
+                } finally {
+                    hide(codeListingsLoader);
+                    show(codeListingsDiv);
+                }
+            }
+            
+            function openCodeDetailsModal(codeId) {
+                const codeData = allCodesMap[codeId];
+                if (!codeData) {
+                    showAlert("Could not find code details. Please try again.", "error");
+                    return;
+                }
+
+                document.getElementById('codeDetailsTitle').textContent = codeData.title;
+                const screenshotsContainer = document.getElementById('codeDetailsScreenshotsContainer');
+                const downloadsList = document.getElementById('codeDetailsDownloadsList');
+                const descriptionContent = document.getElementById('codeDetailsDescriptionContent');
+
+                screenshotsContainer.innerHTML = '';
+                downloadsList.innerHTML = '';
+                descriptionContent.innerHTML = ''; // Clear previous description
+
+                const screenshotsToShow = (codeData.screenshots && codeData.screenshots.length > 0) 
+                                        ? codeData.screenshots 
+                                        : (codeData.screenshotURL ? [codeData.screenshotURL] : []);
+                if (screenshotsToShow.length > 0) {
+                    screenshotsToShow.forEach(ssUrl => {
+                        if (ssUrl) {
+                            const img = document.createElement('img');
+                            img.src = ssUrl;
+                            img.alt = "Screenshot";
+                            screenshotsContainer.appendChild(img);
+                        }
+                    });
+                } else {
+                    screenshotsContainer.innerHTML = '<p class="text-muted-color">No screenshots available.</p>';
+                }
+
+                const downloadsToShow = (codeData.downloadFiles && codeData.downloadFiles.length > 0)
+                                      ? codeData.downloadFiles
+                                      : (codeData.downloadURL ? [{ name: 'Download File', url: codeData.downloadURL }] : []);
+                if (downloadsToShow.length > 0) {
+                    downloadsToShow.forEach(file => {
+                        if (file.url) {
+                            const listItem = document.createElement('li');
+                            const fileNameSpan = document.createElement('span');
+                            fileNameSpan.textContent = file.name || 'Download File';
+                            
+                            const link = document.createElement('a');
+                            link.href = file.url;
+                            link.textContent = 'Download';
+                            link.className = 'btn btn-sm btn-secondary'; 
+                            link.target = "_blank";
+                            link.download = true; 
+                            
+                            listItem.appendChild(fileNameSpan);
+                            listItem.appendChild(link);
+                            downloadsList.appendChild(listItem);
+                        }
+                    });
+                } else {
+                    downloadsList.innerHTML = '<li><p class="text-muted-color">No download files available.</p></li>';
+                }
+
+                // Display description (HTML will be rendered)
+                if (codeData.description) {
+                    descriptionContent.innerHTML = codeData.description;
+                } else {
+                    descriptionContent.innerHTML = '<p class="text-muted-color">No detailed description available.</p>';
+                }
+
+                openModal('codeDetailsModal');
+            }
+
+
+            async function fetchCodesIfNotLoaded() {
+                 if (Object.keys(allCodesMap).length === 0) { 
+                    try {
+                        const snapshot = await db.collection('codes').get(); 
+                        snapshot.forEach(doc => {
+                            allCodesMap[doc.id] = { ...doc.data(), id: doc.id };
+                        });
+                    } catch (err) {
+                        console.error("Error pre-fetching codes:", err);
+                         showAlert("Could not pre-load code details: " + err.message, 'error');
+                    }
+                }
+            }
+
+            async function fetchUserRequests(userId) {
+                show(userRequestsLoader);
+                userRequestsListDiv.innerHTML = '';
+                try {
+                    await fetchCodesIfNotLoaded(); 
+
+                    const requestsSnapshot = await db.collection('requests')
+                        .where('userId', '==', userId)
+                        .orderBy('timestamp', 'desc')
+                        .get();
+                    
+                    if (requestsSnapshot.empty) {
+                         userRequestsListDiv.innerHTML = '<p class="text-center">You have no purchase requests.</p>';
+                    } else {
+                        requestsSnapshot.forEach(doc => {
+                            const request = doc.data();
+                            const codeData = allCodesMap[request.codeId] || { title: 'Unknown Code', isPremium: false };
+
+                            const itemDiv = document.createElement('div');
+                            itemDiv.className = 'requested-code-item';
+                            let actionHtml = ''; 
+
+                            if (request.status === 'approved') {
+                                actionHtml = `<span>Approved. Check "My Codes".</span>`;
+                            } else if (request.status === 'pending'){
+                                actionHtml = `<span>Reviewing...</span>`
+                            } else if (request.status === 'rejected'){
+                                actionHtml = `<span>Rejected. <a href="${telegramSupportLink}" target="_blank" class="btn btn-support btn-sm" style="margin-left: 5px; display: inline-block; padding: 0.3rem 0.6rem; font-size: 0.75rem;">Contact Support</a></span>`;
+                            } else {
+                                actionHtml = `<span>Status: ${request.status || 'N/A'}</span>` 
+                            }
+
+                            let premiumBadgeHtml = '';
+                            if (codeData.isPremium) {
+                                premiumBadgeHtml = '<span class="premium-badge" style="font-size:0.6rem; padding:0.2em 0.5em;">Premium</span>';
+                            }
+
+                            itemDiv.innerHTML = `
+                                <div>
+                                    <p><strong>Code:</strong> ${codeData.title} ${premiumBadgeHtml}</p>
+                                    <p><strong>UTR:</strong> ${request.utrNumber}</p>
+                                    <p><strong>Requested:</strong> ${request.timestamp ? new Date(request.timestamp.seconds * 1000).toLocaleDateString() : 'N/A'}</p>
+                                    <p><strong>Status:</strong> <span class="status-label status-${request.status || 'unknown'}">${request.status || 'Unknown'}</span></p>
+                                </div>
+                                <div class="mt-1" style="min-width: 150px; text-align: right;">
+                                   ${actionHtml}
+                                </div>
+                            `;
+                            userRequestsListDiv.appendChild(itemDiv);
+                        });
+                    }
+                } catch (error) {
+                    let userMessage = "Failed to load your requests. ";
+                    if (error.message && error.message.toLowerCase().includes("index")) {
+                        userMessage = "Error loading requests: The database needs a specific setup (an 'index') to process this request. Please go to your Firebase console and create the index mentioned in the error details. Error details: " + error.message;
+                    } else {
+                        userMessage += error.message;
+                    }
+                    showAlert(userMessage, 'error');
+                    userRequestsListDiv.innerHTML = `<p class="text-center">Error loading requests. Please ensure database indexes are set up if the error mentions them.</p>`;
+                } finally {
+                    hide(userRequestsLoader);
+                }
+            }
+
+            async function fetchMyPurchasedCodes(userId) {
+                show(myCodesLoader);
+                myCodesListDiv.innerHTML = '';
+                try {
+                    await fetchCodesIfNotLoaded(); 
+                    await updateUserApprovedCodes(userId); 
+
+                    if (currentUserApprovedCodeIds.size === 0) {
+                        myCodesListDiv.innerHTML = '<p class="text-center">No approved codes yet. Once approved, codes appear here.</p>';
+                    } else {
+                        let codesDisplayed = 0;
+                        currentUserApprovedCodeIds.forEach(codeId => {
+                            const codeData = allCodesMap[codeId];
+                            if (codeData) { 
+                                codesDisplayed++;
+                                const itemDiv = document.createElement('div');
+                                itemDiv.className = 'purchased-code-item code-card'; 
+                                
+                                let checkCodeButtonHtml = `<button class="btn btn-secondary check-code-btn" data-id="${codeData.id}">Check Code</button>`;
+                                
+                                let premiumBadgeHtml = '';
+                                if (codeData.isPremium) {
+                                    premiumBadgeHtml = '<span class="premium-badge">Premium</span>';
+                                }
+                                
+                                let cardScreenshotUrl = 'https://via.placeholder.com/350x180.png?text=Screenshot+N/A';
+                                if (codeData.screenshots && codeData.screenshots.length > 0 && codeData.screenshots[0]) {
+                                    cardScreenshotUrl = codeData.screenshots[0];
+                                } else if (codeData.screenshotURL) { 
+                                    cardScreenshotUrl = codeData.screenshotURL;
+                                }
+
+                                itemDiv.innerHTML = `
+                                    <div>
+                                        <img src="${cardScreenshotUrl}" alt="${codeData.title} Screenshot" class="screenshot">
+                                        <h3>${codeData.title} ${premiumBadgeHtml}</h3>
+                                        <p class="description">${codeData.description ? (codeData.description.substring(0,100) + (codeData.description.length > 100 ? '...' : '')) : 'No description.'}</p>
+                                    </div>
+                                    <div class="mt-1">
+                                        ${checkCodeButtonHtml}
+                                    </div>
+                                `;
+                                myCodesListDiv.appendChild(itemDiv);
+                            }
+                        });
+
+                        document.querySelectorAll('#myCodesList .check-code-btn').forEach(button => {
+                             button.addEventListener('click', function() {
+                                openCodeDetailsModal(this.dataset.id);
+                            });
+                        });
+
+                        if(codesDisplayed === 0 && currentUserApprovedCodeIds.size > 0) { 
+                             myCodesListDiv.innerHTML = '<p class="text-center">Could not retrieve details for some purchased codes. Ensure `allCodesMap` is populated.</p>';
+                        } else if (codesDisplayed === 0) { 
+                            myCodesListDiv.innerHTML = '<p class="text-center">No approved codes found or details missing.</p>';
+                        }
+                    }
+                } catch (error) {
+                    let userMessage = "Failed to load your purchased codes. ";
+                     if (error.message && error.message.toLowerCase().includes("index")) {
+                        userMessage = "Database error (missing index) while loading purchased codes. Error: " + error.message;
+                    } else {
+                        userMessage += error.message;
+                    }
+                    showAlert(userMessage, 'error');
+                    myCodesListDiv.innerHTML = '<p class="text-center">Error loading purchased codes.</p>';
+                } finally {
+                    hide(myCodesLoader);
+                }
+            }
+            
+            window.onclick = function(event) {
+                if (event.target.classList.contains('modal')) {
+                    closeModal(event.target.id);
+                }
+            }
+
+            return {
+                init: async () => { 
+                    if (!firebaseConfig.apiKey || firebaseConfig.apiKey.startsWith("AIzaSyA") && firebaseConfig.apiKey.length < 30) { 
+                         showAlert("Firebase configuration is missing or placeholder. App may not function.", "error");
+                         console.error("Firebase configuration is missing or incomplete.");
+                         document.getElementById('mainContentContainer').innerHTML = `<div class="container text-center" style="padding-top:5rem;"><p style="font-size:1.2rem; color:var(--secondary-color);">App config error. Contact support.</p></div>`;
+                         return;
+                    }
+                    await fetchConfigSettings(); 
+                    switchToHomeView(); 
+                }
+            };
+        })();
+
+        document.addEventListener('DOMContentLoaded', App.init);
+
+        const styleSheet = document.createElement("style");
+        styleSheet.type = "text/css";
+        styleSheet.innerText = `
+            @keyframes scaleDownModal {
+                from { opacity: 1; transform: scale(1) translateY(0); }
+                to { opacity: 0; transform: scale(0.8) translateY(25px); }
+            }
+        `;
+        document.head.appendChild(styleSheet);
+    </script>
+</body>
+</html>
