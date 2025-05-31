@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>apps and website source code </title>
+    <title>Apps, Websites & Online Courses</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
@@ -12,6 +12,7 @@
         :root {
             --primary-color: #00b8d4; /* Refined Cyan/Teal */
             --secondary-color: #c51162; /* Refined Magenta */
+            --tertiary-color: #4caf50; /* Green for courses/success */
             --background-color: #0f172a; /* Deep Slate Blue */
             --card-background: #1e293b; /* Darker Slate Blue for Cards */
             --glass-background: rgba(30, 41, 59, 0.8); /* Slightly transparent card bg for modals */
@@ -19,10 +20,12 @@
             --text-muted-color: #94a3b8; /* Muted text for descriptions */
             --glow-color-primary: rgba(0, 184, 212, 0.5);
             --glow-color-secondary: rgba(197, 17, 98, 0.5);
+            --glow-color-tertiary: rgba(76, 175, 80, 0.5);
             --border-color: rgba(0, 184, 212, 0.25);
             --input-bg: rgba(255, 255, 255, 0.07);
             --premium-gold: #ffc107;
             --support-btn-bg: #25D366; /* WhatsApp Green, good for support */
+            --verification-bg: #1e293b; 
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -34,7 +37,8 @@
             line-height: 1.6;
             overflow-x: hidden;
             background-image: radial-gradient(circle at top left, rgba(0, 184, 212, 0.05), transparent 30%),
-                              radial-gradient(circle at bottom right, rgba(197, 17, 98, 0.05), transparent 30%);
+                              radial-gradient(circle at bottom right, rgba(197, 17, 98, 0.05), transparent 30%),
+                              radial-gradient(circle at top right, rgba(76, 175, 80, 0.03), transparent 25%);
         }
 
         .container {
@@ -45,7 +49,7 @@
         }
 
         header {
-            background: rgba(15, 23, 42, 0.7); 
+            background: rgba(15, 23, 42, 0.7);
             backdrop-filter: blur(12px);
             padding: 1rem 0;
             border-bottom: 1px solid var(--border-color);
@@ -57,7 +61,7 @@
         header .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
         .logo {
             font-size: 2rem;
-            font-weight: 700; 
+            font-weight: 700;
             color: var(--primary-color);
             text-shadow: 0 0 10px var(--glow-color-primary);
             letter-spacing: 1px;
@@ -68,11 +72,11 @@
             background: transparent;
             color: var(--primary-color);
             border: 2px solid var(--primary-color);
-            padding: 0.75rem 1.5rem; 
-            border-radius: 8px; 
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 0.9rem;
-            font-weight: 600; 
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
             transition: all 0.25s ease-in-out;
@@ -94,6 +98,16 @@
             color: var(--background-color);
             box-shadow: 0 0 15px var(--glow-color-secondary), 0 0 25px var(--glow-color-secondary);
         }
+        .btn-tertiary {
+            color: var(--tertiary-color);
+            border-color: var(--tertiary-color);
+            box-shadow: 0 0 6px var(--glow-color-tertiary), inset 0 0 4px rgba(76,175,80,0.3);
+        }
+        .btn-tertiary:hover:not(:disabled) {
+            background: var(--tertiary-color);
+            color: var(--background-color);
+            box-shadow: 0 0 15px var(--glow-color-tertiary), 0 0 25px var(--glow-color-tertiary);
+        }
         .btn-support {
             background-color: var(--support-btn-bg);
             border-color: var(--support-btn-bg);
@@ -101,7 +115,7 @@
              box-shadow: 0 0 6px rgba(37, 211, 102, 0.5), inset 0 0 4px rgba(37,211,102,0.3);
         }
         .btn-support:hover:not(:disabled) {
-            background-color: #1DAE52; 
+            background-color: #1DAE52;
             border-color: #1DAE52;
             color: white;
             box-shadow: 0 0 15px rgba(37, 211, 102, 0.5), 0 0 25px rgba(37, 211, 102, 0.5);
@@ -110,8 +124,8 @@
         .btn:disabled {
             cursor: not-allowed;
             opacity: 0.5;
-            border-color: #4b5563; 
-            color: #9ca3af; 
+            border-color: #4b5563;
+            color: #9ca3af;
             box-shadow: none;
         }
          .btn:disabled:hover {
@@ -131,9 +145,14 @@
             color: var(--primary-color);
             text-shadow: 0 0 12px var(--glow-color-primary);
         }
+        .hero h1 .highlight-course {
+            color: var(--tertiary-color);
+            text-shadow: 0 0 12px var(--glow-color-tertiary);
+        }
         .hero p { font-size: 1.25rem; color: var(--text-muted-color); opacity: 0.9; max-width: 700px; margin: 0 auto;}
 
-        #codeListingsSection h2, #userDashboard h2, #myCodesPage h2, #codeDetailsModal h2 {
+        #codeListingsSection h2, #userDashboard h2, #myCodesPage h2, #codeDetailsModal h2,
+        #coursesPage h2, #myCoursesPage h2, #certificateVerificationPage h2, #courseTestModal h2 {
             text-align: center;
             font-size: 2.2rem;
             color: var(--primary-color);
@@ -141,52 +160,61 @@
             font-weight: 600;
             text-shadow: 0 0 8px var(--glow-color-primary);
         }
+        #coursesPage h2, #myCoursesPage h2, #courseTestModal h2 { color: var(--tertiary-color); text-shadow: 0 0 8px var(--glow-color-tertiary);}
+        #certificateVerificationPage h2 { color: var(--secondary-color); text-shadow: 0 0 8px var(--glow-color-secondary); }
+
+
         #codeDetailsModal h2 { font-size: 1.8rem; margin-bottom: 1.5rem;}
 
 
-        #codeListings, #myCodesList {
+        #codeListings, #myCodesList, #courseListings, #myCoursesListing {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
             padding: 2rem 0;
         }
 
-        .code-card {
+        .code-card, .course-card {
             background: var(--card-background);
             border: 1px solid var(--border-color);
-            border-radius: 12px; 
+            border-radius: 12px;
             padding: 1.75rem;
             box-shadow: 0 10px 30px rgba(0,0,0,0.25), 0 0 0px var(--glow-color-primary) inset;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            position: relative; 
+            position: relative;
         }
-        .code-card:hover {
+        .code-card:hover, .course-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 15px 40px rgba(0,0,0,0.3), 0 0 10px var(--glow-color-primary);
         }
-        .code-card img.screenshot {
+        .course-card { border-color: rgba(76, 175, 80, 0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.25), 0 0 0px var(--glow-color-tertiary) inset; }
+        .course-card:hover { box-shadow: 0 15px 40px rgba(0,0,0,0.3), 0 0 10px var(--glow-color-tertiary); }
+
+        .code-card img.screenshot, .course-card img.thumbnail {
             width: 100%;
-            height: 180px; 
+            height: 180px;
             object-fit: cover;
             border-radius: 8px;
             margin-bottom: 1.2rem;
             border: 1px solid var(--border-color);
         }
-        .code-card h3 {
+        .course-card img.thumbnail { border-color: rgba(76, 175, 80, 0.2); }
+
+        .code-card h3, .course-card h3 {
             color: var(--text-color);
             margin-bottom: 0.5rem;
             font-size: 1.3rem;
             font-weight: 600;
-            display: flex; 
-            align-items: center; 
-            flex-wrap: wrap; 
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
         }
         .premium-badge {
             background: linear-gradient(45deg, var(--premium-gold), #ffab00);
-            color: #121212; 
+            color: #121212;
             padding: 0.25em 0.7em;
             font-size: 0.7rem;
             font-weight: bold;
@@ -198,9 +226,15 @@
             line-height: 1.2;
         }
 
-        .code-card p.description { font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-muted-color); flex-grow: 1; min-height: 50px;}
-        .code-card .price { font-size: 1.4rem; font-weight: bold; color: var(--secondary-color); margin-bottom: 1.2rem; text-shadow: 0 0 6px var(--glow-color-secondary); }
-        .code-card .btn, .code-card a.btn { width: 100%; text-align: center; }
+        .code-card p.description, .course-card p.description {
+            font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-muted-color); flex-grow: 1; min-height: 50px;
+        }
+        .code-card .price, .course-card .price {
+            font-size: 1.4rem; font-weight: bold; color: var(--secondary-color); margin-bottom: 1.2rem; text-shadow: 0 0 6px var(--glow-color-secondary);
+        }
+        .course-card .price { color: var(--tertiary-color); text-shadow: 0 0 6px var(--glow-color-tertiary); }
+
+        .code-card .btn, .code-card a.btn, .course-card .btn { width: 100%; text-align: center; }
 
         /* Modals */
         .modal {
@@ -220,7 +254,10 @@
             animation: scaleUpModal 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
         }
-        #codeDetailsModal .modal-content { max-width: 750px; } 
+        #codeDetailsModal .modal-content, #courseDetailsModal .modal-content, #courseTestModal .modal-content { max-width: 750px; }
+        #userProfileModal .modal-content {max-width: 550px;}
+        #courseTestModal .modal-content {max-width: 850px; max-height: 90vh; overflow-y: auto;}
+
 
         @keyframes scaleUpModal {
             from { opacity: 0; transform: scale(0.8) translateY(25px); }
@@ -229,7 +266,9 @@
         .modal-content input[type="email"],
         .modal-content input[type="password"],
         .modal-content input[type="text"],
-        .modal-content input[type="number"] {
+        .modal-content input[type="number"],
+        .modal-content input[type="tel"], 
+        .modal-content input[type="date"] {
             width: 100%; padding: 15px; margin-bottom: 1.3rem;
             border-radius: 8px; border: 1px solid var(--border-color);
             background-color: var(--input-bg); color: var(--text-color); font-size: 1rem;
@@ -245,30 +284,29 @@
             transition: color 0.3s, transform 0.3s;
         }
         .close-btn:hover, .close-btn:focus { color: var(--primary-color); transform: rotate(180deg) scale(1.1); }
-        
+
         #paymentQrCodeImg {
             display: block; margin: 1.2rem auto 1.8rem; width: 170px; height: 170px;
             border: 3px solid var(--primary-color); border-radius: 10px;
-            box-shadow: 0 0 15px var(--glow-color-primary); background-color: white; 
+            box-shadow: 0 0 15px var(--glow-color-primary); background-color: white;
         }
         #paymentModal p { text-align: center; margin-bottom: 0.6rem; font-size: 1.05rem; }
 
-        /* Code Details Modal Specifics */
         #codeDetailsScreenshotsContainer { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; justify-content: center;}
         #codeDetailsScreenshotsContainer img {
-            width: calc(33.333% - 10px); 
+            width: calc(33.333% - 10px);
             max-height: 180px;
-            object-fit: cover; 
+            object-fit: cover;
             border: 1px solid var(--border-color);
             border-radius: 6px;
             cursor: pointer; transition: transform 0.2s;
         }
          #codeDetailsScreenshotsContainer img:hover { transform: scale(1.05); }
         @media (max-width: 600px) {
-            #codeDetailsScreenshotsContainer img { width: calc(50% - 5px); } 
+            #codeDetailsScreenshotsContainer img { width: calc(50% - 5px); }
         }
          @media (max-width: 400px) {
-            #codeDetailsScreenshotsContainer img { width: 100%; } 
+            #codeDetailsScreenshotsContainer img { width: 100%; }
         }
 
         #codeDetailsDownloadsList { list-style: none; padding: 0; }
@@ -280,8 +318,35 @@
         #codeDetailsDescriptionContent strong, #codeDetailsDescriptionContent mark { color: var(--primary-color); background-color: rgba(0, 184, 212, 0.1); padding: 0.1em 0.3em; border-radius: 3px;}
         #codeDetailsDescriptionContent mark { background-color: rgba(255, 193, 7, 0.2); color: var(--premium-gold); }
 
+        .enrolled-course-item {
+            background: var(--card-background); border: 1px solid rgba(76,175,80,0.3);
+            border-radius: 10px; padding: 1.5rem; margin-bottom: 1.5rem;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+        .enrolled-course-item h3 { color: var(--tertiary-color); margin-bottom: 1rem; font-size: 1.4rem;}
+        .enrolled-course-item p { margin: 0.4rem 0; font-size: 0.95rem;}
+        .enrolled-course-item p strong { color: var(--text-muted-color); font-weight: 600;}
+        .enrolled-course-item .course-actions { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);}
+        .enrolled-course-item .course-actions .btn { margin-right: 10px; margin-bottom: 10px;}
+        .enrolled-course-item .course-content-pdfs, .enrolled-course-item .course-certificates { margin-top: 1rem; padding-top:1rem; border-top: 1px solid var(--border-color); }
+        .enrolled-course-item .course-content-pdfs h4, .enrolled-course-item .course-certificates h4 { margin-bottom: 0.8rem; color: var(--text-color); font-size: 1.1rem; }
+        .enrolled-course-item ul { list-style: none; padding-left: 5px; }
+        .enrolled-course-item ul li { margin-bottom: 0.7rem; }
+        .enrolled-course-item ul li a.btn { display: inline-block; margin-left: 10px; }
+        .enrolled-course-item .download-info { font-size: 0.85rem; color: var(--text-muted-color); display: block; margin-top: 5px; }
+        .enrolled-course-item .course-result-status {
+            font-weight: bold;
+            padding: 0.3em 0.6em;
+            border-radius: 4px;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+        .result-pass { background-color: var(--tertiary-color); color: var(--background-color); }
+        .result-fail { background-color: var(--secondary-color); color: var(--text-color); }
+        .result-pending { background-color: var(--premium-gold); color: #111; }
+        .result-test_submitted, .result-timed_out { background-color: var(--premium-gold); color: #111; }
 
-        /* User Dashboard & My Codes */
+
         #userDashboard, #myCodesPage { padding: 2rem 0; }
         .requested-code-item, .purchased-code-item {
             background: var(--card-background); border: 1px solid var(--border-color);
@@ -298,6 +363,8 @@
         .status-pending { background-color: #ffc107; color: #212529; box-shadow: 0 0 8px #ffc107aa; }
         .status-approved { background-color: #198754; color: white; box-shadow: 0 0 8px #198754aa; }
         .status-rejected { background-color: #dc3545; color: white; box-shadow: 0 0 8px #dc3545aa; }
+        .status-test_submitted, .status-timed_out { background-color: var(--premium-gold); color: #111; box-shadow: 0 0 8px #ffc107aa;}
+
 
         .purchased-code-item .btn, .purchased-code-item a.btn { min-width: 130px; text-align:center; }
 
@@ -306,7 +373,7 @@
         .mt-1 { margin-top: 1rem; }
 
         .loader-container { display: flex; justify-content: center; align-items: center; padding: 2.5rem; }
-        
+
         #alertContainer {
             position: fixed; top: 85px; left: 50%; transform: translateX(-50%);
             z-index: 2000; width: 90%; max-width: 480px;
@@ -319,18 +386,112 @@
         }
         .alert-success { background: linear-gradient(45deg, var(--primary-color), #00a1b6); border-left: 5px solid #007c8c; }
         .alert-error { background: linear-gradient(45deg, var(--secondary-color), #a80d50); border-left: 5px solid #80003c; }
-        
+
         @keyframes slideDownFadeOut {
             0% { opacity: 0; transform: translateY(-25px) translateX(-50%); }
             10% { opacity: 1; transform: translateY(0) translateX(-50%); }
             90% { opacity: 1; transform: translateY(0) translateX(-50%); }
             100% { opacity: 0; transform: translateY(25px) translateX(-50%); display:none; }
         }
-        #alertContainer .alert { 
+        #alertContainer .alert {
             position: relative;
-            left: 50%; 
-            transform: translateX(-50%) translateY(0); 
+            left: 50%;
+            transform: translateX(-50%) translateY(0);
         }
+
+        #certificateVerificationForm {
+            max-width: 500px;
+            margin: 2rem auto;
+            background: var(--verification-bg);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
+        }
+        #certificateVerificationForm input[type="text"],
+        #certificateVerificationForm input[type="date"] {
+            width: 100%; padding: 15px; margin-bottom: 1.3rem;
+            border-radius: 8px; border: 1px solid var(--border-color);
+            background-color: var(--input-bg); color: var(--text-color); font-size: 1rem;
+        }
+        #certificateVerificationForm input:focus {
+            outline: none; border-color: var(--secondary-color); 
+            box-shadow: 0 0 10px var(--glow-color-secondary);
+        }
+        #certificateVerificationForm .btn { width: 100%; border-color: var(--secondary-color); color:var(--secondary-color); }
+        #certificateVerificationForm .btn:hover { background: var(--secondary-color); color: var(--background-color); box-shadow: 0 0 15px var(--glow-color-secondary), 0 0 25px var(--glow-color-secondary); }
+
+        #verificationResults {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: var(--verification-bg);
+            border-radius: 8px;
+            border: 1px solid rgba(76,175,80,0.2); 
+        }
+        #verificationResults .result-item {
+            background: var(--card-background);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 6px;
+            border-left: 4px solid var(--tertiary-color);
+        }
+        #verificationResults .result-item p { margin: 0.3rem 0; font-size: 0.95rem; }
+        #verificationResults .result-item strong { color: var(--text-muted-color); }
+        #verificationResults .result-item .status-pass { color: var(--tertiary-color); font-weight: bold; }
+        #verificationResults .result-item .status-fail { color: var(--secondary-color); font-weight: bold; }
+        #verificationResults .result-item .status-pending { color: var(--premium-gold); font-weight: bold; }
+
+
+        /* Course Test Modal Styles */
+        #courseTestTimer {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding: 0.5rem;
+            background-color: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            border: 1px solid var(--secondary-color);
+            box-shadow: 0 0 10px var(--glow-color-secondary);
+        }
+        .test-question-block {
+            background-color: rgba(255, 255, 255, 0.03);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            border-left: 3px solid var(--tertiary-color);
+        }
+        .test-question-block p.question-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        .test-question-block .options-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        .test-question-block .options-list li {
+            margin-bottom: 0.75rem;
+            background: rgba(255,255,255,0.05);
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+         .test-question-block .options-list li:hover {
+             background: rgba(255,255,255,0.1);
+         }
+        .test-question-block .options-list input[type="radio"] {
+            margin-right: 10px;
+            accent-color: var(--tertiary-color);
+            transform: scale(1.1);
+        }
+        #submitTestBtnContainer {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
 
         footer {
             text-align: center; padding: 2.8rem 0; margin-top: 3.5rem;
@@ -338,7 +499,7 @@
             font-size: 0.85rem;
         }
         .footer-support-btn-container { margin-top: 1rem; }
-        
+
         .ad-placeholder {
             width: 100%;
             margin: 20px auto;
@@ -352,13 +513,14 @@
             .hero h1 { font-size: 2.6rem; } .hero p { font-size: 1.1rem; }
             header .container { flex-direction: column; align-items: flex-start; }
             .logo { margin-bottom: 0.5rem; }
-            nav { margin-top: 10px; width: 100%; display: flex; flex-wrap: wrap; justify-content: flex-start;} 
+            nav { margin-top: 10px; width: 100%; display: flex; flex-wrap: wrap; justify-content: flex-start;}
             nav button, nav a.btn { margin: 5px 8px 5px 0; }
             .modal-content { margin: 12% auto; width: 95%; }
-            #codeListings, #myCodesList { grid-template-columns: 1fr; gap: 1.5rem; }
+            #courseTestModal .modal-content { margin: 5% auto;}
+            #codeListings, #myCodesList, #courseListings, #myCoursesListing { grid-template-columns: 1fr; gap: 1.5rem; }
             .requested-code-item, .purchased-code-item { flex-direction: column; align-items: flex-start; }
             .requested-code-item div:last-child, .purchased-code-item div:last-child { margin-top: 1rem; width:100%;}
-            .requested-code-item .btn, .purchased-code-item .btn, 
+            .requested-code-item .btn, .purchased-code-item .btn,
             .requested-code-item a.btn, .purchased-code-item a.btn { width: 100%; }
              #codeDetailsModal .modal-content { margin: 10% auto; }
         }
@@ -367,6 +529,10 @@
             .btn { padding: 0.65rem 1.3rem; font-size: 0.85rem; }
             .modal-content { padding: 25px; }
             .modal-content h2 { font-size: 1.6rem; }
+        }
+        @keyframes scaleDownModal { 
+            from { opacity: 1; transform: scale(1) translateY(0); }
+            to { opacity: 0; transform: scale(0.8) translateY(25px); }
         }
     </style>
 </head>
@@ -377,16 +543,20 @@
         <div class="container">
             <div class="logo">THE CODE DEPOT</div>
             <nav>
-                <button id="homeBtn" class="btn">Home</button>
+                <button id="homeBtn" class="btn">Codes Home</button>
+                <button id="coursesHomeBtn" class="btn btn-tertiary">Courses</button>
+                <button id="verifyCertificateBtn" class="btn btn-secondary">Verify Certificate</button>
+                <button id="myCoursesBtn" class="btn btn-tertiary hidden">My Courses</button>
                 <button id="myCodesBtn" class="btn hidden">My Codes</button>
                 <button id="dashboardBtn" class="btn hidden">My Requests</button>
+                <button id="userProfileBtn" class="btn btn-secondary hidden">Profile</button>
                 <button id="loginBtn" class="btn">Login</button>
                 <button id="signupBtn" class="btn btn-secondary">Sign Up</button>
                 <button id="logoutBtn" class="btn btn-secondary hidden">Logout</button>
             </nav>
         </div>
     </header>
-    
+
     <div id="adBannerTopContainer" class="ad-placeholder"></div>
 
     <main id="mainContentContainer">
@@ -395,7 +565,6 @@
                 <h1>Discover & <span class="highlight">Unlock</span><br>Premium Source Codes</h1>
                 <p>Your gateway to high-quality apps, games, and website templates.</p>
             </section>
-
             <section id="codeListingsSection">
                 <h2>Available Codes</h2>
                 <div id="codeListingsLoader" class="loader-container">
@@ -405,8 +574,22 @@
             </section>
         </div>
 
+        <div id="coursesPage" class="container hidden">
+            <section class="hero">
+                <h1>Enroll & <span class="highlight-course">Elevate</span><br>Your Skills with Our Courses</h1>
+                <p>Access practical PDF courses to learn and grow.</p>
+            </section>
+            <section id="courseListingsSection">
+                <h2>Available Courses</h2>
+                <div id="courseListingsLoader" class="loader-container">
+                    <lottie-player src="https://assets3.lottiefiles.com/packages/lf20_p8bfn5to.json" background="transparent" speed="1" style="width: 150px; height: 150px;" loop autoplay></lottie-player>
+                </div>
+                <div id="courseListings"></div>
+            </section>
+        </div>
+
         <section id="userDashboard" class="container hidden">
-            <h2>My Payment Requests</h2>
+            <h2>My Payment Requests (Codes & Courses)</h2>
             <div id="userRequestsLoader" class="loader-container hidden">
                 <lottie-player src="https://assets3.lottiefiles.com/packages/lf20_p8bfn5to.json" background="transparent" speed="1" style="width: 120px; height: 120px;" loop autoplay></lottie-player>
             </div>
@@ -420,15 +603,44 @@
             </div>
             <div id="myCodesList"></div>
         </section>
+
+        <section id="myCoursesPage" class="container hidden">
+            <h2>My Enrolled Courses</h2>
+            <div id="myEnrolledCoursesLoader" class="loader-container hidden">
+                <lottie-player src="https://assets3.lottiefiles.com/packages/lf20_p8bfn5to.json" background="transparent" speed="1" style="width: 120px; height: 120px;" loop autoplay></lottie-player>
+            </div>
+            <div id="myCoursesListing"></div>
+        </section>
+
+        <section id="certificateVerificationPage" class="container hidden">
+            <h2>Verify Course Certificate</h2>
+            <form id="certificateVerificationForm">
+                <p style="text-align: center; margin-bottom: 1.5rem; color: var(--text-muted-color);">
+                    Enter User ID and Date of Birth to verify course completion.
+                </p>
+                <div>
+                    <label for="verifyUserId" style="display:block; margin-bottom:0.5rem; font-size:0.9rem; color:var(--text-muted-color);">User ID:</label>
+                    <input type="text" id="verifyUserId" placeholder="Enter User ID" required>
+                </div>
+                <div>
+                    <label for="verifyDob" style="display:block; margin-bottom:0.5rem; font-size:0.9rem; color:var(--text-muted-color);">Date of Birth:</label>
+                    <input type="date" id="verifyDob" required>
+                </div>
+                <button type="submit" class="btn">Verify</button>
+            </form>
+            <div id="verificationResultsLoader" class="loader-container hidden">
+                <lottie-player src="https://assets3.lottiefiles.com/packages/lf20_p8bfn5to.json" background="transparent" speed="1" style="width: 100px; height: 100px;" loop autoplay></lottie-player>
+            </div>
+            <div id="verificationResults" class="hidden"></div>
+        </section>
     </main>
 
     <div id="adBannerBottomContainer" class="ad-placeholder"></div>
     <div id="adPopupContainer"></div>
 
-    <!-- Login Modal -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('loginModal')">×</span>
+            <span class="close-btn" data-modal-id="loginModal">×</span>
             <h2>Login</h2>
             <form id="loginForm">
                 <input type="email" id="loginEmail" placeholder="Email Address" required>
@@ -438,10 +650,9 @@
         </div>
     </div>
 
-    <!-- Signup Modal -->
     <div id="signupModal" class="modal">
         <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('signupModal')">×</span>
+            <span class="close-btn" data-modal-id="signupModal">×</span>
             <h2>Create Account</h2>
             <form id="signupForm">
                 <input type="email" id="signupEmail" placeholder="Email Address" required>
@@ -451,26 +662,26 @@
         </div>
     </div>
 
-    <!-- Payment Modal -->
     <div id="paymentModal" class="modal">
         <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('paymentModal')">×</span>
-            <h2>Payment Request</h2>
-            <p>Scan QR to pay: <strong id="paymentAmount"></strong></p>
+            <span class="close-btn" data-modal-id="paymentModal">×</span>
+            <h2 id="paymentModalTitle">Payment Request</h2>
+            <p>Scan QR to pay: <strong id="paymentAmount"></strong> for <strong id="paymentItemName">Item</strong></p>
             <img id="paymentQrCodeImg" src="https://i.postimg.cc/26jqrLCh/IMG-20250529-094357.png" alt="Payment QR Code">
             <p style="font-size:0.9em; color: var(--text-muted-color);">After payment, enter the UTR/Transaction ID below.</p>
             <form id="paymentForm">
                 <input type="text" id="utrNumber" placeholder="Enter UTR Number" required>
-                <input type="hidden" id="paymentCodeId">
+                <input type="hidden" id="paymentItemId">
+                <input type="hidden" id="paymentItemType">
+                <input type="hidden" id="paymentEnrollmentId"> <!-- For course test context -->
                 <button type="submit" class="btn" style="width:100%;">Submit Payment Request</button>
             </form>
         </div>
     </div>
 
-    <!-- Code Details Modal -->
     <div id="codeDetailsModal" class="modal">
         <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('codeDetailsModal')">×</span>
+            <span class="close-btn" data-modal-id="codeDetailsModal">×</span>
             <h2 id="codeDetailsTitle">Code Details</h2>
             <div id="codeDetailsScreenshotsSection">
                 <h4 style="color: var(--text-muted-color); margin-bottom: 10px; font-weight:500;">Screenshots:</h4>
@@ -486,7 +697,49 @@
             </div>
         </div>
     </div>
-    
+
+    <div id="userProfileModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" data-modal-id="userProfileModal">×</span>
+            <h2 id="userProfileModalTitle">Complete Your Profile</h2>
+            <div id="profileUserIdDisplay" class="hidden" style="margin-bottom: 1rem; padding: 0.5rem; background: rgba(255,255,255,0.05); border-radius: 5px; text-align: center;">
+                <strong>User ID:</strong> <span id="displayUserId" style="color: var(--premium-gold); font-weight:bold;"></span>
+            </div>
+            <p id="userProfileModalInfo" style="font-size:0.9em; color: var(--text-muted-color); margin-bottom: 1rem;">
+                Please fill in your details. Some fields may not be editable later.
+            </p>
+            <form id="userProfileForm">
+                <input type="text" id="profileFullName" placeholder="Full Name (as per documents)" required>
+                <input type="text" id="profileFatherName" placeholder="Father's Name (as per documents)" required>
+                <input type="text" id="profileAadhaarNumber" placeholder="Aadhaar Number (12 digits, Optional)" pattern="\d{12}">
+                <small style="display:block; margin-top:-1rem; margin-bottom:1rem; font-size:0.8em; color:var(--text-muted-color);">Aadhaar is optional. If provided, it cannot be changed later.</small>
+                
+                <input type="tel" id="profilePhoneNumber" placeholder="Phone Number (10 digits)" required pattern="\d{10}">
+                <label for="profileDateOfBirth" style="display:block; margin-bottom:0.5rem; font-size:0.9rem; color:var(--text-muted-color);">Date of Birth (as per Aadhaar/documents):</label>
+                <input type="date" id="profileDateOfBirth" required>
+                <input type="hidden" id="profileFormPurpose" value="initial">
+                <button type="submit" class="btn btn-tertiary" style="width:100%;">Save Profile</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="courseTestModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" data-modal-id="courseTestModal">×</span>
+            <h2 id="courseTestModalTitle">Course Test</h2>
+            <div id="courseTestTimer">45:00</div>
+            <form id="courseTestForm">
+                <div id="courseTestQuestionsContainer">
+                    <!-- Questions will be loaded here by JavaScript -->
+                </div>
+                <div id="submitTestBtnContainer">
+                    <button type="submit" class="btn btn-tertiary" style="width: auto; min-width:200px;">Submit Test</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
     <footer>
         <p>© 2025 Dilshad Ansari. All Rights Reserved. Designed with <span style="color: var(--secondary-color); font-size: 1.2em;">♥</span>.</p>
         <div class="footer-support-btn-container">
@@ -500,10 +753,10 @@
             authDomain: "dragon-versus-tiger.firebaseapp.com",
             databaseURL: "https://dragon-versus-tiger-default-rtdb.firebaseio.com",
             projectId: "dragon-versus-tiger",
-            storageBucket: "dragon-versus-tiger.appspot.com", 
+            storageBucket: "dragon-versus-tiger.appspot.com",
             messagingSenderId: "41405330873",
             appId: "1:41405330873:web:bb56834a896a565c51b268",
-            measurementId: "G-X9E49MH88V" 
+            measurementId: "G-X9E49MH88V"
         };
 
         firebase.initializeApp(firebaseConfig);
@@ -511,83 +764,153 @@
         const db = firebase.firestore();
 
         const App = (() => {
-            const homeBtn = document.getElementById('homeBtn');
-            const loginBtn = document.getElementById('loginBtn');
-            const signupBtn = document.getElementById('signupBtn');
-            const dashboardBtn = document.getElementById('dashboardBtn');
-            const myCodesBtn = document.getElementById('myCodesBtn');
-            const logoutBtn = document.getElementById('logoutBtn');
-            
-            const homePage = document.getElementById('homePage');
-            const userDashboard = document.getElementById('userDashboard');
-            const myCodesPage = document.getElementById('myCodesPage');
-            
-            const loginModalEl = document.getElementById('loginModal');
-            const signupModalEl = document.getElementById('signupModal');
-            const paymentModalEl = document.getElementById('paymentModal');
-            const codeDetailsModalEl = document.getElementById('codeDetailsModal'); 
+            // Element Cache
+            const el = {
+                homeBtn: document.getElementById('homeBtn'),
+                loginBtn: document.getElementById('loginBtn'),
+                signupBtn: document.getElementById('signupBtn'),
+                dashboardBtn: document.getElementById('dashboardBtn'),
+                myCodesBtn: document.getElementById('myCodesBtn'),
+                logoutBtn: document.getElementById('logoutBtn'),
+                coursesHomeBtn: document.getElementById('coursesHomeBtn'),
+                myCoursesBtn: document.getElementById('myCoursesBtn'),
+                userProfileBtn: document.getElementById('userProfileBtn'),
+                verifyCertificateBtn: document.getElementById('verifyCertificateBtn'),
+                homePage: document.getElementById('homePage'),
+                userDashboard: document.getElementById('userDashboard'),
+                myCodesPage: document.getElementById('myCodesPage'),
+                coursesPage: document.getElementById('coursesPage'),
+                myCoursesPage: document.getElementById('myCoursesPage'),
+                certificateVerificationPage: document.getElementById('certificateVerificationPage'),
+                loginModal: document.getElementById('loginModal'),
+                signupModal: document.getElementById('signupModal'),
+                paymentModal: document.getElementById('paymentModal'),
+                codeDetailsModal: document.getElementById('codeDetailsModal'),
+                userProfileModal: document.getElementById('userProfileModal'),
+                courseTestModal: document.getElementById('courseTestModal'),
+                loginForm: document.getElementById('loginForm'),
+                signupForm: document.getElementById('signupForm'),
+                paymentForm: document.getElementById('paymentForm'),
+                userProfileForm: document.getElementById('userProfileForm'),
+                certificateVerificationForm: document.getElementById('certificateVerificationForm'),
+                courseTestForm: document.getElementById('courseTestForm'),
+                courseTestQuestionsContainer: document.getElementById('courseTestQuestionsContainer'),
+                courseTestTimerDisplay: document.getElementById('courseTestTimer'),
+                courseTestModalTitle: document.getElementById('courseTestModalTitle'),
+                verificationResults: document.getElementById('verificationResults'),
+                verificationResultsLoader: document.getElementById('verificationResultsLoader'),
+                codeListings: document.getElementById('codeListings'),
+                codeListingsLoader: document.getElementById('codeListingsLoader'),
+                userRequestsList: document.getElementById('userRequestsList'),
+                userRequestsLoader: document.getElementById('userRequestsLoader'),
+                myCodesList: document.getElementById('myCodesList'),
+                myCodesLoader: document.getElementById('myCodesLoader'),
+                courseListings: document.getElementById('courseListings'),
+                courseListingsLoader: document.getElementById('courseListingsLoader'),
+                myCoursesListing: document.getElementById('myCoursesListing'),
+                myEnrolledCoursesLoader: document.getElementById('myEnrolledCoursesLoader'),
+                profileUserIdDisplay: document.getElementById('profileUserIdDisplay'),
+                displayUserId: document.getElementById('displayUserId'),
+                alertContainer: document.getElementById('alertContainer'),
+                footerSupportLink: document.getElementById('footerSupportLink'),
+                adBannerTopContainer: document.getElementById('adBannerTopContainer'),
+                adBannerBottomContainer: document.getElementById('adBannerBottomContainer'),
+                adPopupContainer: document.getElementById('adPopupContainer'),
+                mainContentContainer: document.getElementById('mainContentContainer')
+            };
 
-            const loginForm = document.getElementById('loginForm');
-            const signupForm = document.getElementById('signupForm');
-            const paymentForm = document.getElementById('paymentForm');
-
-            const codeListingsDiv = document.getElementById('codeListings');
-            const codeListingsLoader = document.getElementById('codeListingsLoader');
-            const userRequestsListDiv = document.getElementById('userRequestsList');
-            const userRequestsLoader = document.getElementById('userRequestsLoader');
-            const myCodesListDiv = document.getElementById('myCodesList');
-            const myCodesLoader = document.getElementById('myCodesLoader');
-            
-            const alertContainer = document.getElementById('alertContainer');
-            const footerSupportLink = document.getElementById('footerSupportLink');
-
-            const adBannerTopContainer = document.getElementById('adBannerTopContainer');
-            const adBannerBottomContainer = document.getElementById('adBannerBottomContainer');
-            const adPopupContainer = document.getElementById('adPopupContainer');
-            
-            let allCodesMap = {}; 
-            let currentUserApprovedCodeIds = new Set(); 
-            let telegramSupportLink = "https://t.me/D_24lottery_customer_support"; 
+            // State
+            let allCodesMap = {};
+            let currentUserApprovedCodeIds = new Set();
+            let allCoursesMap = {};
+            let currentUserEnrolledCourseIds = {}; // Stores enrollmentId as key, enrollmentData as value
+            let currentUserProfile = null;
+            let pendingCourseEnrollmentAction = null; // For profile completion before payment
+            let pendingCourseTestAction = null; // For profile completion before test
+            let telegramSupportLink = "https://t.me/D_24lottery_customer_support"; // Default
             let adSettings = {};
+            let courseTestTimerInterval = null;
+            let currentTestEnrollmentId = null;
+            const TEST_DURATION_MINUTES = 45;
 
-            const show = el => el.classList.remove('hidden');
-            const hide = el => el.classList.add('hidden');
+
+            // Utility Functions
+            const show = element => element.classList.remove('hidden');
+            const hide = element => element.classList.add('hidden');
 
             function showAlert(message, type = 'success') {
                 const alertDiv = document.createElement('div');
                 alertDiv.className = `alert alert-${type}`;
                 alertDiv.textContent = message;
-                if (alertContainer.firstChild) {
-                    alertContainer.insertBefore(alertDiv, alertContainer.firstChild);
+                if (el.alertContainer.firstChild) {
+                    el.alertContainer.insertBefore(alertDiv, el.alertContainer.firstChild);
                 } else {
-                    alertContainer.appendChild(alertDiv);
+                    el.alertContainer.appendChild(alertDiv);
                 }
                 setTimeout(() => {
-                    alertDiv.style.opacity = '0'; 
-                    setTimeout(() => alertDiv.remove(), 500); 
-                }, 3300); 
+                    alertDiv.style.opacity = '0';
+                    setTimeout(() => alertDiv.remove(), 500);
+                }, 3300);
+            }
+
+            function openModal(modalId) {
+                const modalElement = document.getElementById(modalId);
+                if (modalElement) modalElement.style.display = 'block';
+            }
+
+            function closeModal(modalId) {
+                const modalElement = document.getElementById(modalId);
+                if (modalElement) {
+                    modalElement.style.animation = 'scaleDownModal 0.3s forwards';
+                    setTimeout(() => {
+                        modalElement.style.display = 'none';
+                        modalElement.style.animation = ''; // Reset for next time
+                    }, 300);
+                }
             }
             
-            window.openModal = (modalId) => document.getElementById(modalId).style.display = 'block';
-            window.closeModal = (modalId) => {
-                const modal = document.getElementById(modalId);
-                modal.style.animation = 'scaleDownModal 0.3s forwards';
-                 setTimeout(() => {
-                    modal.style.display = 'none';
-                    modal.style.animation = ''; 
-                 }, 300); 
-            };
+            document.querySelectorAll('.close-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const modalId = btn.dataset.modalId;
+                    if (modalId === 'courseTestModal' && courseTestTimerInterval) {
+                        if (confirm("Are you sure you want to close the test? Progress will not be saved and it will be marked as timed out if not submitted.")) {
+                            clearInterval(courseTestTimerInterval);
+                            courseTestTimerInterval = null;
+                            handleTestSubmission(currentTestEnrollmentId, 'timed_out_manual_close'); // Or a different reason
+                        } else {
+                            return; // Don't close
+                        }
+                    }
+                    closeModal(modalId);
+                });
+            });
+            window.onclick = function(event) { 
+                if (event.target.classList.contains('modal')) {
+                    const modalId = event.target.id;
+                     if (modalId === 'courseTestModal' && courseTestTimerInterval) {
+                        if (confirm("Are you sure you want to close the test? Progress will not be saved and it will be marked as timed out if not submitted.")) {
+                            clearInterval(courseTestTimerInterval);
+                            courseTestTimerInterval = null;
+                            handleTestSubmission(currentTestEnrollmentId, 'timed_out_manual_close');
+                        } else {
+                            return; 
+                        }
+                    }
+                    closeModal(modalId);
+                }
+            }
+
 
             async function fetchConfigSettings() {
                 try {
                     const generalSettingsDoc = await db.collection('config').doc('general_settings').get();
                     if (generalSettingsDoc.exists && generalSettingsDoc.data().telegramSupportLink) {
                         telegramSupportLink = generalSettingsDoc.data().telegramSupportLink;
-                        footerSupportLink.href = telegramSupportLink;
-                        show(footerSupportLink);
+                        el.footerSupportLink.href = telegramSupportLink;
+                        show(el.footerSupportLink);
                     } else {
-                         footerSupportLink.href = "https://t.me/D_24lottery_customer_support"; 
-                         show(footerSupportLink); 
+                         el.footerSupportLink.href = "https://t.me/D_24lottery_customer_support"; 
+                         show(el.footerSupportLink);
                          console.warn("Telegram support link not configured in Firestore. Using default.");
                     }
 
@@ -602,34 +925,46 @@
             }
 
             function displayAds() {
-                if (adSettings.bannerAdCodeTop && adBannerTopContainer) {
-                    adBannerTopContainer.innerHTML = adSettings.bannerAdCodeTop;
-                    executeScriptsInElement(adBannerTopContainer);
+                if (adSettings.bannerAdCodeTop && el.adBannerTopContainer) {
+                    el.adBannerTopContainer.innerHTML = adSettings.bannerAdCodeTop;
+                    executeScriptsInElement(el.adBannerTopContainer);
                 }
-                if (adSettings.bannerAdCodeBottom && adBannerBottomContainer) {
-                    adBannerBottomContainer.innerHTML = adSettings.bannerAdCodeBottom;
-                    executeScriptsInElement(adBannerBottomContainer);
+                if (adSettings.bannerAdCodeBottom && el.adBannerBottomContainer) {
+                    el.adBannerBottomContainer.innerHTML = adSettings.bannerAdCodeBottom;
+                    executeScriptsInElement(el.adBannerBottomContainer);
                 }
-                if (adSettings.popUpAdCode && adPopupContainer) {
-                    adPopupContainer.innerHTML = adSettings.popUpAdCode;
-                    executeScriptsInElement(adPopupContainer);
+                if (adSettings.popUpAdCode && el.adPopupContainer) {
+                    el.adPopupContainer.innerHTML = adSettings.popUpAdCode;
+                    executeScriptsInElement(el.adPopupContainer);
                 }
             }
-            
+
             function executeScriptsInElement(element) {
-                const scripts = element.getElementsByTagName('script');
-                for (let i = 0; i < scripts.length; i++) {
-                    const script = scripts[i];
+                const scripts = Array.from(element.getElementsByTagName('script'));
+                scripts.forEach(oldScript => {
                     const newScript = document.createElement('script');
-                    if (script.src) {
-                        newScript.src = script.src;
-                    } else {
-                        newScript.textContent = script.textContent;
-                    }
-                    if (script.type) {
-                        newScript.type = script.type;
-                    }
-                    document.head.appendChild(newScript).parentNode.removeChild(newScript);
+                    Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                    newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                    oldScript.parentNode.replaceChild(newScript, oldScript);
+                });
+            }
+            
+            async function getNextUserId() {
+                const counterRef = db.collection('config').doc('user_id_counter');
+                try {
+                    return await db.runTransaction(async (transaction) => {
+                        const counterDoc = await transaction.get(counterRef);
+                        let nextId = 10001;
+                        if (counterDoc.exists && counterDoc.data().lastId) {
+                            nextId = counterDoc.data().lastId + 1;
+                        }
+                        transaction.set(counterRef, { lastId: nextId }, { merge: true });
+                        return String(nextId);
+                    });
+                } catch (error) {
+                    console.error("Error generating next User ID:", error);
+                    showAlert("Error assigning User ID. Please try again or contact support.", "error");
+                    throw error; 
                 }
             }
 
@@ -639,12 +974,27 @@
                 try {
                     const userDoc = await userRef.get();
                     if (!userDoc.exists) {
+                        const newUserId = await getNextUserId();
                         await userRef.set({
                             uid: user.uid,
                             email: user.email,
+                            userId: newUserId,
                             isBanned: false,
+                            profileCompleted: false,
                             createdAt: firebase.firestore.FieldValue.serverTimestamp()
                         });
+                        currentUserProfile = { uid: user.uid, email: user.email, userId: newUserId, profileCompleted: false, isBanned: false };
+                    } else {
+                        currentUserProfile = userDoc.data();
+                        if (!currentUserProfile.userId) { // Retroactively assign User ID if missing
+                            try {
+                                const existingUserId = await getNextUserId(); // Get a new ID
+                                await userRef.update({ userId: existingUserId });
+                                currentUserProfile.userId = existingUserId;
+                            } catch (idError) {
+                                console.error("Failed to assign User ID to existing user:", idError);
+                            }
+                        }
                     }
                 } catch (error) {
                     console.error("Error ensuring user document:", error);
@@ -655,10 +1005,7 @@
                 if (!userId) return false;
                 try {
                     const userDoc = await db.collection('users').doc(userId).get();
-                    if (userDoc.exists && userDoc.data().isBanned === true) {
-                        return true; 
-                    }
-                    return false;
+                    return userDoc.exists && userDoc.data().isBanned === true;
                 } catch (error) {
                     console.error("Error checking ban status:", error);
                     return false; 
@@ -670,32 +1017,48 @@
                     const isBanned = await checkUserBanStatus(user.uid);
                     if (isBanned) {
                         showAlert("Your account has been suspended. Please contact support.", 'error');
-                        auth.signOut(); 
-                        return; 
+                        auth.signOut();
+                        return;
                     }
 
-                    await ensureUserDocument(user); 
-                    hide(loginBtn); hide(signupBtn);
-                    show(dashboardBtn); show(myCodesBtn); show(logoutBtn);
+                    await ensureUserDocument(user);
+                    hide(el.loginBtn); hide(el.signupBtn);
+                    show(el.dashboardBtn); show(el.myCodesBtn); show(el.logoutBtn);
+                    show(el.myCoursesBtn); show(el.userProfileBtn);
+
                     await updateUserApprovedCodes(user.uid);
-                    
-                    if (!homePage.classList.contains('hidden')) {
-                        await fetchCodes();
-                    } else if (!userDashboard.classList.contains('hidden')) {
-                        fetchUserRequests(user.uid);
-                    } else if (!myCodesPage.classList.contains('hidden')) {
-                        fetchMyPurchasedCodes(user.uid);
-                    }
-                } else {
-                    show(loginBtn); show(signupBtn);
-                    hide(dashboardBtn); hide(myCodesBtn); hide(logoutBtn);
+                    await updateUserEnrolledCourses(user.uid); // This now populates currentUserEnrolledCourseIds with enrollmentId as key
+
+                    // Refresh current view or default to home
+                    if (!el.homePage.classList.contains('hidden')) await fetchCodes();
+                    else if (!el.coursesPage.classList.contains('hidden')) await fetchCourses();
+                    else if (!el.userDashboard.classList.contains('hidden')) fetchUserRequests(user.uid);
+                    else if (!el.myCodesPage.classList.contains('hidden')) fetchMyPurchasedCodes(user.uid);
+                    else if (!el.myCoursesPage.classList.contains('hidden')) fetchMyEnrolledCourses(user.uid);
+
+                } else { // User logged out
+                    show(el.loginBtn); show(el.signupBtn);
+                    hide(el.dashboardBtn); hide(el.myCodesBtn); hide(el.logoutBtn);
+                    hide(el.myCoursesBtn); hide(el.userProfileBtn);
+
                     currentUserApprovedCodeIds.clear();
-                    if (!homePage.classList.contains('hidden') || 
-                        document.getElementById('mainContentContainer').offsetParent === null) {
-                         switchToHomeView(); 
+                    currentUserEnrolledCourseIds = {};
+                    currentUserProfile = null;
+                    
+                    // If on a page that requires login, redirect to home
+                    if (el.userDashboard.style.display !== 'none' || 
+                        el.myCodesPage.style.display !== 'none' ||
+                        el.myCoursesPage.style.display !== 'none') {
+                        switchToHomeView();
+                    } else if (!el.homePage.classList.contains('hidden')) {
+                        fetchCodes(); // Refresh home page for non-logged-in view
+                    } else if (!el.coursesPage.classList.contains('hidden')) {
+                        fetchCourses(); // Refresh courses page
                     }
-                    userRequestsListDiv.innerHTML = '';
-                    myCodesListDiv.innerHTML = '';
+
+                    el.userRequestsList.innerHTML = '';
+                    el.myCodesList.innerHTML = '';
+                    el.myCoursesListing.innerHTML = '';
                 }
             });
 
@@ -707,451 +1070,772 @@
                         .where('userId', '==', userId)
                         .where('status', '==', 'approved')
                         .get();
-                    requestsSnapshot.forEach(doc => {
-                        currentUserApprovedCodeIds.add(doc.data().codeId);
-                    });
+                    requestsSnapshot.forEach(doc => currentUserApprovedCodeIds.add(doc.data().codeId));
                 } catch (error) {
                     console.error("Error fetching user's approved codes:", error);
-                    if (error.message && error.message.toLowerCase().includes("index")) {
-                         showAlert("Database error (missing index) while checking approved codes. Error: " + error.message, 'error');
-                    }
                 }
             }
 
-            function switchToHomeView() {
-                show(homePage);
-                hide(userDashboard);
-                hide(myCodesPage);
-                fetchCodes(); 
-            }
-
-            function switchToDashboardView() {
-                hide(homePage);
-                show(userDashboard);
-                hide(myCodesPage);
-                const currentUser = auth.currentUser;
-                if (currentUser) fetchUserRequests(currentUser.uid);
-                else userRequestsListDiv.innerHTML = '<p class="text-center">Please log in to see your requests.</p>';
-            }
-
-            function switchToMyCodesView() {
-                hide(homePage);
-                hide(userDashboard);
-                show(myCodesPage);
-                const currentUser = auth.currentUser;
-                if (currentUser) fetchMyPurchasedCodes(currentUser.uid);
-                else myCodesListDiv.innerHTML = '<p class="text-center">Please log in to see your purchased codes.</p>';
-            }
-
-            homeBtn.addEventListener('click', switchToHomeView);
-            loginBtn.addEventListener('click', () => openModal('loginModal'));
-            signupBtn.addEventListener('click', () => openModal('signupModal'));
-            dashboardBtn.addEventListener('click', switchToDashboardView);
-            myCodesBtn.addEventListener('click', switchToMyCodesView); 
-
-            logoutBtn.addEventListener('click', () => {
-                auth.signOut().then(() => showAlert("Logged out successfully."));
-            });
-
-            loginForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const email = document.getElementById('loginEmail').value;
-                const password = document.getElementById('loginPassword').value;
+            async function updateUserEnrolledCourses(userId) {
+                currentUserEnrolledCourseIds = {}; // Reset
+                if (!userId) return;
                 try {
-                    await auth.signInWithEmailAndPassword(email, password);
-                    closeModal('loginModal');
-                    showAlert("Logged in successfully!");
-                    loginForm.reset();
+                    const enrollmentsSnapshot = await db.collection('courseEnrollments')
+                        .where('userId', '==', userId)
+                        // .where('status', '==', 'approved') // We need all enrollments to check test status etc.
+                        .get();
+                    enrollmentsSnapshot.forEach(doc => {
+                        // Store the full enrollment data keyed by enrollment ID
+                        currentUserEnrolledCourseIds[doc.id] = { enrollmentId: doc.id, ...doc.data() };
+                    });
+                } catch (error) {
+                    console.error("Error fetching user's enrolled courses:", error);
+                }
+            }
+
+
+            function hideAllMainSections() {
+                [el.homePage, el.userDashboard, el.myCodesPage, el.coursesPage, el.myCoursesPage, el.certificateVerificationPage].forEach(hide);
+            }
+
+            function switchToHomeView() { hideAllMainSections(); show(el.homePage); fetchCodes(); }
+            function switchToCoursesHomeView() { hideAllMainSections(); show(el.coursesPage); fetchCourses(); }
+            function switchToMyCoursesView() { hideAllMainSections(); show(el.myCoursesPage); auth.currentUser ? fetchMyEnrolledCourses(auth.currentUser.uid) : (el.myCoursesListing.innerHTML = '<p class="text-center">Please log in to view your courses.</p>'); }
+            function switchToDashboardView() { hideAllMainSections(); show(el.userDashboard); auth.currentUser ? fetchUserRequests(auth.currentUser.uid) : (el.userRequestsList.innerHTML = '<p class="text-center">Please log in to view your requests.</p>'); }
+            function switchToMyCodesView() { hideAllMainSections(); show(el.myCodesPage); auth.currentUser ? fetchMyPurchasedCodes(auth.currentUser.uid) : (el.myCodesList.innerHTML = '<p class="text-center">Please log in to view your codes.</p>'); }
+            function switchToCertificateVerificationView() { hideAllMainSections(); show(el.certificateVerificationPage); hide(el.verificationResults); hide(el.verificationResultsLoader); el.certificateVerificationForm.reset(); }
+
+            // Form Submissions
+            el.loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                try {
+                    await auth.signInWithEmailAndPassword(el.loginForm.loginEmail.value, el.loginForm.loginPassword.value);
+                    closeModal('loginModal'); showAlert("Logged in successfully!"); el.loginForm.reset();
                 } catch (error) { showAlert(`Login failed: ${error.message}`, 'error'); }
             });
 
-            signupForm.addEventListener('submit', async (e) => {
+            el.signupForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const email = document.getElementById('signupEmail').value;
-                const password = document.getElementById('signupPassword').value;
                 try {
-                    await auth.createUserWithEmailAndPassword(email, password);
-                    closeModal('signupModal');
-                    showAlert("Signed up successfully! You are now logged in.");
-                    signupForm.reset();
+                    await auth.createUserWithEmailAndPassword(el.signupForm.signupEmail.value, el.signupForm.signupPassword.value);
+                    closeModal('signupModal'); showAlert("Signed up successfully! You are now logged in."); el.signupForm.reset();
                 } catch (error) { showAlert(`Signup failed: ${error.message}`, 'error'); }
             });
 
-            paymentForm.addEventListener('submit', async (e) => {
+            el.paymentForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const user = auth.currentUser;
-                if (!user) { showAlert("Please login to submit a request.", 'error'); return; }
-                
-                const isBanned = await checkUserBanStatus(user.uid);
-                if (isBanned) {
-                    showAlert("Your account is suspended. Cannot submit payment request.", 'error');
-                    auth.signOut();
-                    return;
-                }
+                if (!user) { showAlert("Please login.", 'error'); return; }
+                if (await checkUserBanStatus(user.uid)) { showAlert("Account suspended.", 'error'); auth.signOut(); return; }
 
-                const utrNumber = document.getElementById('utrNumber').value;
-                const codeId = document.getElementById('paymentCodeId').value;
-
-                if (!utrNumber.trim()) { showAlert("UTR number is required.", 'error'); return; }
+                const utr = el.paymentForm.utrNumber.value;
+                const itemId = el.paymentForm.paymentItemId.value;
+                const itemType = el.paymentForm.paymentItemType.value;
+                if (!utr.trim()) { showAlert("UTR number is required.", 'error'); return; }
 
                 try {
-                    await db.collection('requests').add({
-                        userId: user.uid,
+                    const collectionName = itemType === 'code' ? 'requests' : 'courseEnrollments';
+                    const idFieldName = itemType === 'code' ? 'codeId' : 'courseId';
+                    let dataToSave = { 
+                        userId: user.uid, 
                         userEmail: user.email, 
-                        codeId: codeId,
-                        utrNumber: utrNumber,
+                        [idFieldName]: itemId, 
+                        utrNumber: utr, 
                         status: 'pending', 
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                    await ensureUserDocument(user); 
-                    closeModal('paymentModal');
-                    showAlert("Payment request submitted! It will be reviewed.");
-                    paymentForm.reset();
-                    if (!userDashboard.classList.contains('hidden')) {
-                        fetchUserRequests(user.uid);
-                    } else {
-                        switchToDashboardView();
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp() 
+                    };
+                    if (itemType === 'course') { 
+                        Object.assign(dataToSave, { 
+                            enrollmentDate: null, 
+                            certificateUrl: null, 
+                            marksheetUrl: null, 
+                            downloadsEnabled: false, 
+                            resultStatus: 'Pending', // Initial result status for a new enrollment
+                            percentage: null,
+                            testAttempted: false, // For the new test feature
+                            testPercentage: null,
+                            testCompletionDetails: null
+                        }); 
                     }
+                    
+                    await db.collection(collectionName).add(dataToSave);
+                    closeModal('paymentModal'); showAlert("Payment request submitted!"); el.paymentForm.reset();
+                    if (!el.userDashboard.classList.contains('hidden')) fetchUserRequests(user.uid); 
+                    else switchToDashboardView(); // Go to dashboard to see the pending request
                 } catch (error) { showAlert(`Request submission failed: ${error.message}`, 'error'); }
             });
+            
+            el.userProfileForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const user = auth.currentUser;
+                if (!user) { showAlert("You must be logged in.", "error"); return; }
+
+                const fullName = el.userProfileForm.profileFullName.value.trim();
+                const fatherName = el.userProfileForm.profileFatherName.value.trim();
+                const aadhaarNumber = el.userProfileForm.profileAadhaarNumber.value.trim();
+                const phoneNumber = el.userP
+rofileForm.profilePhoneNumber.value.trim();
+                const dateOfBirth = el.userProfileForm.profileDateOfBirth.value;
+
+                if (!fullName || !fatherName || !phoneNumber || !dateOfBirth) { showAlert("Full Name, Father's Name, Phone, and DOB are required.", "error"); return; }
+                if (aadhaarNumber && !/^\d{12}$/.test(aadhaarNumber)) { showAlert("Aadhaar must be 12 digits if provided.", "error"); return; }
+                if (!/^\d{10}$/.test(phoneNumber)) { showAlert("Phone number must be 10 digits.", "error"); return; }
+
+                const userRef = db.collection('users').doc(user.uid);
+                try {
+                    const updateData = { fullName, fatherName, phoneNumber, dateOfBirth, profileCompleted: true };
+                    // Handle Aadhaar: only set if provided AND not already set or matches current.
+                    if (aadhaarNumber) {
+                        if (currentUserProfile && currentUserProfile.aadhaarNumber && currentUserProfile.aadhaarNumber !== aadhaarNumber) {
+                            showAlert("Aadhaar cannot be changed once set.", "error"); 
+                            el.userProfileForm.profileAadhaarNumber.value = currentUserProfile.aadhaarNumber; return;
+                        }
+                        updateData.aadhaarNumber = aadhaarNumber;
+                    } else {
+                         // If user clears the field, and it was previously set, keep it. Or set to null if not previously set.
+                        updateData.aadhaarNumber = (currentUserProfile && currentUserProfile.aadhaarNumber) ? currentUserProfile.aadhaarNumber : null;
+                    }
+
+
+                    await userRef.update(updateData);
+                    showAlert("Profile updated!", "success");
+                    currentUserProfile = { ...currentUserProfile, ...updateData }; // Update local profile
+                    if (currentUserProfile.userId) { el.displayUserId.textContent = currentUserProfile.userId; show(el.profileUserIdDisplay); }
+                    closeModal('userProfileModal');
+
+                    // If profile was completed for a pending action, proceed with it
+                    if (pendingCourseEnrollmentAction) {
+                        const { courseId, price, title } = pendingCourseEnrollmentAction;
+                        pendingCourseEnrollmentAction = null; // Clear it
+                        openPaymentModalForCourse(courseId, price, title);
+                    } else if (pendingCourseTestAction) {
+                        const { enrollmentId, courseId, courseTitle } = pendingCourseTestAction;
+                        pendingCourseTestAction = null; // Clear it
+                        initiateCourseTest(enrollmentId, courseId, courseTitle);
+                    }
+
+                } catch (error) { showAlert("Profile update failed: " + error.message, "error"); }
+            });
+            
+            async function openUserProfileModal(purpose = 'initial') {
+                const user = auth.currentUser;
+                if (!user) return;
+                if (!currentUserProfile) { 
+                    const userDoc = await db.collection('users').doc(user.uid).get();
+                    if (userDoc.exists) currentUserProfile = userDoc.data();
+                    else { showAlert("User profile not found. Please re-login.", "error"); return; }
+                }
+
+                el.userProfileForm.profileFormPurpose.value = purpose;
+                el.userProfileModal.querySelector('#userProfileModalTitle').textContent = purpose === 'edit' ? "Edit Your Profile" : "Complete Your Profile";
+                el.userProfileModal.querySelector('#userProfileModalInfo').textContent = purpose === 'edit' ? "Update your details. Aadhaar, if set, cannot be changed." : "Please complete your profile to proceed. Aadhaar is optional.";
+                
+                el.userProfileForm.reset(); // Clear previous values
+                if (currentUserProfile) {
+                    el.userProfileForm.profileFullName.value = currentUserProfile.fullName || '';
+                    el.userProfileForm.profileFatherName.value = currentUserProfile.fatherName || '';
+                    el.userProfileForm.profileAadhaarNumber.value = currentUserProfile.aadhaarNumber || '';
+                    el.userProfileForm.profilePhoneNumber.value = currentUserProfile.phoneNumber || '';
+                    el.userProfileForm.profileDateOfBirth.value = currentUserProfile.dateOfBirth || '';
+                    
+                    // Disable Aadhaar if it's already set
+                    el.userProfileForm.profileAadhaarNumber.disabled = !!currentUserProfile.aadhaarNumber;
+
+                    if (currentUserProfile.userId) { el.displayUserId.textContent = currentUserProfile.userId; show(el.profileUserIdDisplay); } 
+                    else { hide(el.profileUserIdDisplay); }
+                } else {
+                    el.userProfileForm.profileAadhaarNumber.disabled = false; // Enable if no profile yet
+                    hide(el.profileUserIdDisplay);
+                }
+                openModal('userProfileModal');
+            }
 
             async function fetchCodes() {
-                show(codeListingsLoader);
-                hide(codeListingsDiv);
-                codeListingsDiv.innerHTML = ''; 
+                show(el.codeListingsLoader); hide(el.codeListings); el.codeListings.innerHTML = '';
                 try {
                     const snapshot = await db.collection('codes').orderBy('timestamp', 'desc').get();
-                    allCodesMap = {}; 
-                    
-                    if(snapshot.empty){
-                         codeListingsDiv.innerHTML = '<p class="text-center" style="grid-column: 1 / -1;">No codes available yet. Check back soon!</p>';
-                    } else {
+                    allCodesMap = {}; // Clear and repopulate
+                    if (snapshot.empty) { el.codeListings.innerHTML = '<p class="text-center" style="grid-column: 1 / -1;">No codes available at the moment.</p>'; }
+                    else {
                         snapshot.forEach(doc => {
-                            const code = doc.data();
-                            code.id = doc.id;
-                            allCodesMap[doc.id] = code; 
-
+                            const code = { ...doc.data(), id: doc.id };
+                            allCodesMap[doc.id] = code;
                             const card = document.createElement('div');
                             card.className = 'code-card';
-                           
-                            let buttonHtml = '';
-                            if (auth.currentUser && currentUserApprovedCodeIds.has(code.id)) {
-                                buttonHtml = `<button class="btn btn-secondary check-code-btn" data-id="${code.id}">Check Code</button>`;
-                            } else {
-                                buttonHtml = `<button class="btn get-code-btn" data-id="${code.id}" data-price="${code.price}">Get Code</button>`;
-                            }
-
-                            let premiumBadgeHtml = '';
-                            if (code.isPremium) {
-                                premiumBadgeHtml = '<span class="premium-badge">Premium</span>';
-                            }
-                            
-                            let cardScreenshotUrl = 'https://via.placeholder.com/350x180.png?text=Screenshot+N/A';
-                            if (code.screenshots && code.screenshots.length > 0 && code.screenshots[0]) {
-                                cardScreenshotUrl = code.screenshots[0];
-                            } else if (code.screenshotURL) { 
-                                cardScreenshotUrl = code.screenshotURL;
-                            }
-
+                            const isApproved = auth.currentUser && currentUserApprovedCodeIds.has(code.id);
+                            const buttonHtml = isApproved ? 
+                                `<button class="btn btn-secondary check-code-btn" data-id="${code.id}">View Details</button>` : 
+                                `<button class="btn get-code-btn" data-id="${code.id}" data-price="${code.price}" data-title="${code.title}">Get Code</button>`;
+                            const premiumBadgeHtml = code.isPremium ? '<span class="premium-badge">Premium</span>' : '';
+                            const screenshotUrl = (code.screenshots && code.screenshots.length > 0 && code.screenshots[0]) || code.screenshotURL || 'https://via.placeholder.com/350x180.png?text=Preview+Not+Available';
                             card.innerHTML = `
                                 <div>
-                                    <img src="${cardScreenshotUrl}" alt="${code.title} Screenshot" class="screenshot">
+                                    <img src="${screenshotUrl}" alt="${code.title}" class="screenshot">
                                     <h3>${code.title} ${premiumBadgeHtml}</h3>
-                                    <p class="description">${code.description ? (code.description.substring(0,120) + (code.description.length > 120 ? '...' : '')) : 'No description available.'}</p>
+                                    <p class="description">${(code.description || '').substring(0,120)}${(code.description || '').length > 120 ? '...' : ''}</p>
                                     <div class="price">₹${code.price}</div>
                                 </div>
-                                <div class="mt-1">
-                                    ${buttonHtml}
-                                </div>
+                                <div class="mt-1">${buttonHtml}</div>
                             `;
-                            codeListingsDiv.appendChild(card);
+                            el.codeListings.appendChild(card);
                         });
-
-                        document.querySelectorAll('.get-code-btn').forEach(button => {
-                            button.addEventListener('click', async function() {
-                                if (!auth.currentUser) {
-                                    showAlert("Please login to get code.", 'error');
-                                    openModal('loginModal'); return;
-                                }
-                                const isBanned = await checkUserBanStatus(auth.currentUser.uid);
-                                if (isBanned) {
-                                    showAlert("Your account is suspended. Cannot get code.", 'error');
-                                    auth.signOut();
-                                    return;
-                                }
-                                const codeId = this.dataset.id;
-                                const price = this.dataset.price;
-                                document.getElementById('paymentAmount').textContent = `₹${price}`;
-                                document.getElementById('paymentCodeId').value = codeId;
-                                openModal('paymentModal');
-                            });
-                        });
-                        document.querySelectorAll('.check-code-btn').forEach(button => {
-                             button.addEventListener('click', function() {
-                                openCodeDetailsModal(this.dataset.id);
-                            });
-                        });
+                        el.codeListings.querySelectorAll('.get-code-btn').forEach(button => button.addEventListener('click', handleGetCodeClick));
+                        el.codeListings.querySelectorAll('.check-code-btn').forEach(button => button.addEventListener('click', () => openCodeDetailsModal(button.dataset.id)));
                     }
-                } catch (error) {
-                    showAlert("Failed to load codes. " + error.message, 'error');
-                    codeListingsDiv.innerHTML = '<p class="text-center" style="grid-column: 1 / -1;">Error loading codes. Please refresh.</p>';
-                } finally {
-                    hide(codeListingsLoader);
-                    show(codeListingsDiv);
-                }
+                } catch (error) { showAlert("Failed to load codes: " + error.message, 'error'); el.codeListings.innerHTML = '<p class="text-center" style="grid-column: 1 / -1;">Error loading codes. Please try again.</p>'; }
+                finally { hide(el.codeListingsLoader); show(el.codeListings); }
             }
-            
+
+            async function handleGetCodeClick() {
+                if (!auth.currentUser) { showAlert("Please login to get codes.", 'error'); openModal('loginModal'); return; }
+                if (await checkUserBanStatus(auth.currentUser.uid)) { showAlert("Your account is suspended. Please contact support.", 'error'); auth.signOut(); return; }
+                document.getElementById('paymentModalTitle').textContent = "Payment for Code";
+                document.getElementById('paymentAmount').textContent = `₹${this.dataset.price}`;
+                document.getElementById('paymentItemName').textContent = this.dataset.title;
+                document.getElementById('paymentItemId').value = this.dataset.id;
+                document.getElementById('paymentItemType').value = 'code';
+                openModal('paymentModal');
+            }
+
+            async function fetchCourses() {
+                show(el.courseListingsLoader); hide(el.courseListings); el.courseListings.innerHTML = '';
+                try {
+                    const snapshot = await db.collection('courses').orderBy('timestamp', 'desc').get();
+                    allCoursesMap = {}; // Clear and repopulate
+                    if (snapshot.empty) { el.courseListings.innerHTML = '<p class="text-center" style="grid-column: 1 / -1;">No courses available at the moment.</p>'; }
+                    else {
+                        snapshot.forEach(doc => {
+                            const course = { ...doc.data(), id: doc.id };
+                            allCoursesMap[doc.id] = course; // Store full course data
+                            const card = document.createElement('div');
+                            card.className = 'course-card';
+
+                            // Check if user is enrolled and approved for this course
+                            let isEnrolledAndApproved = false;
+                            if (auth.currentUser) {
+                                for (const enrollmentId in currentUserEnrolledCourseIds) {
+                                    if (currentUserEnrolledCourseIds[enrollmentId].courseId === course.id && 
+                                        currentUserEnrolledCourseIds[enrollmentId].status === 'approved') {
+                                        isEnrolledAndApproved = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            
+                            const buttonHtml = isEnrolledAndApproved ? 
+                                `<button class="btn btn-tertiary view-course-content-btn" data-id="${course.id}">View Content</button>` : 
+                                `<button class="btn btn-tertiary enroll-course-btn" data-id="${course.id}" data-price="${course.price}" data-title="${course.title}">Enroll Now</button>`;
+                            const thumbnailUrl = course.thumbnailUrl || 'https://via.placeholder.com/350x180.png?text=Course+Preview';
+                            
+                            card.innerHTML = `
+                                <div>
+                                    <img src="${thumbnailUrl}" alt="${course.title}" class="thumbnail">
+                                    <h3>${course.title}</h3>
+                                    <p class="description">${(course.description || '').substring(0,120)}${(course.description || '').length > 120 ? '...' : ''}</p>
+                                    <p class="description" style="font-weight:bold; color: var(--text-color);">Duration: ${course.durationDays || 'N/A'} days</p>
+                                    <div class="price">₹${course.price}</div>
+                                </div>
+                                <div class="mt-1">${buttonHtml}</div>
+                            `;
+                            el.courseListings.appendChild(card);
+                        });
+                         el.courseListings.querySelectorAll('.enroll-course-btn').forEach(button => button.addEventListener('click', handleEnrollCourseClick));
+                         el.courseListings.querySelectorAll('.view-course-content-btn').forEach(button => button.addEventListener('click', switchToMyCoursesView));
+                    }
+                } catch (error) { showAlert("Failed to load courses: " + error.message, 'error'); el.courseListings.innerHTML = '<p class="text-center" style="grid-column: 1 / -1;">Error loading courses. Please try again.</p>'; }
+                finally { hide(el.courseListingsLoader); show(el.courseListings); }
+            }
+
+            async function handleEnrollCourseClick() {
+                 if (!auth.currentUser) { showAlert("Please login to enroll in courses.", 'error'); openModal('loginModal'); return; }
+                 if (await checkUserBanStatus(auth.currentUser.uid)) { showAlert("Your account is suspended. Please contact support.", 'error'); auth.signOut(); return; }
+                 
+                 if (!currentUserProfile || !currentUserProfile.profileCompleted) {
+                     showAlert("Please complete your profile before enrolling.", 'error');
+                     pendingCourseEnrollmentAction = { courseId: this.dataset.id, price: this.dataset.price, title: this.dataset.title };
+                     openUserProfileModal('initial_enroll'); return;
+                 }
+                 openPaymentModalForCourse(this.dataset.id, this.dataset.price, this.dataset.title);
+            }
+
+            function openPaymentModalForCourse(courseId, price, title) {
+                document.getElementById('paymentModalTitle').textContent = "Payment for Course";
+                document.getElementById('paymentAmount').textContent = `₹${price}`;
+                document.getElementById('paymentItemName').textContent = title;
+                document.getElementById('paymentItemId').value = courseId;
+                document.getElementById('paymentItemType').value = 'course';
+                openModal('paymentModal');
+            }
+
             function openCodeDetailsModal(codeId) {
                 const codeData = allCodesMap[codeId];
-                if (!codeData) {
-                    showAlert("Could not find code details. Please try again.", "error");
-                    return;
-                }
-
+                if (!codeData) { showAlert("Code details not found.", "error"); return; }
                 document.getElementById('codeDetailsTitle').textContent = codeData.title;
                 const screenshotsContainer = document.getElementById('codeDetailsScreenshotsContainer');
                 const downloadsList = document.getElementById('codeDetailsDownloadsList');
                 const descriptionContent = document.getElementById('codeDetailsDescriptionContent');
+                screenshotsContainer.innerHTML = ''; downloadsList.innerHTML = ''; 
+                descriptionContent.innerHTML = ''; // Sanitize/parse HTML if description allows it
 
-                screenshotsContainer.innerHTML = '';
-                downloadsList.innerHTML = '';
-                descriptionContent.innerHTML = ''; // Clear previous description
+                const screenshots = (codeData.screenshots && codeData.screenshots.length > 0) ? codeData.screenshots : (codeData.screenshotURL ? [codeData.screenshotURL] : []);
+                if (screenshots.length > 0) screenshots.forEach(ss => { if(ss) screenshotsContainer.innerHTML += `<img src="${ss}" alt="Screenshot">`; });
+                else screenshotsContainer.innerHTML = '<p class="text-muted-color">No screenshots available.</p>';
 
-                const screenshotsToShow = (codeData.screenshots && codeData.screenshots.length > 0) 
-                                        ? codeData.screenshots 
-                                        : (codeData.screenshotURL ? [codeData.screenshotURL] : []);
-                if (screenshotsToShow.length > 0) {
-                    screenshotsToShow.forEach(ssUrl => {
-                        if (ssUrl) {
-                            const img = document.createElement('img');
-                            img.src = ssUrl;
-                            img.alt = "Screenshot";
-                            screenshotsContainer.appendChild(img);
-                        }
-                    });
-                } else {
-                    screenshotsContainer.innerHTML = '<p class="text-muted-color">No screenshots available.</p>';
-                }
-
-                const downloadsToShow = (codeData.downloadFiles && codeData.downloadFiles.length > 0)
-                                      ? codeData.downloadFiles
-                                      : (codeData.downloadURL ? [{ name: 'Download File', url: codeData.downloadURL }] : []);
-                if (downloadsToShow.length > 0) {
-                    downloadsToShow.forEach(file => {
-                        if (file.url) {
-                            const listItem = document.createElement('li');
-                            const fileNameSpan = document.createElement('span');
-                            fileNameSpan.textContent = file.name || 'Download File';
-                            
-                            const link = document.createElement('a');
-                            link.href = file.url;
-                            link.textContent = 'Download';
-                            link.className = 'btn btn-sm btn-secondary'; 
-                            link.target = "_blank";
-                            link.download = true; 
-                            
-                            listItem.appendChild(fileNameSpan);
-                            listItem.appendChild(link);
-                            downloadsList.appendChild(listItem);
-                        }
-                    });
-                } else {
-                    downloadsList.innerHTML = '<li><p class="text-muted-color">No download files available.</p></li>';
-                }
-
-                // Display description (HTML will be rendered)
-                if (codeData.description) {
-                    descriptionContent.innerHTML = codeData.description;
-                } else {
-                    descriptionContent.innerHTML = '<p class="text-muted-color">No detailed description available.</p>';
-                }
-
+                const downloads = (codeData.downloadFiles && codeData.downloadFiles.length > 0) ? codeData.downloadFiles : (codeData.downloadURL ? [{ name: 'Download File', url: codeData.downloadURL }] : []);
+                if (downloads.length > 0) downloads.forEach(file => { if(file.url) downloadsList.innerHTML += `<li><span>${file.name || 'File'}</span><a href="${file.url}" class="btn btn-sm btn-secondary" target="_blank" download>Download</a></li>`; });
+                else downloadsList.innerHTML = '<li><p class="text-muted-color">No download files available.</p></li>';
+                
+                // For description, if it contains HTML, assign it directly. Otherwise, wrap in <p>.
+                // Be cautious with direct HTML assignment if not sanitized on admin side.
+                descriptionContent.innerHTML = codeData.description || '<p class="text-muted-color">No description provided.</p>';
                 openModal('codeDetailsModal');
             }
-
-
-            async function fetchCodesIfNotLoaded() {
-                 if (Object.keys(allCodesMap).length === 0) { 
-                    try {
-                        const snapshot = await db.collection('codes').get(); 
-                        snapshot.forEach(doc => {
-                            allCodesMap[doc.id] = { ...doc.data(), id: doc.id };
-                        });
-                    } catch (err) {
-                        console.error("Error pre-fetching codes:", err);
-                         showAlert("Could not pre-load code details: " + err.message, 'error');
-                    }
+            
+            async function fetchCodesAndCoursesIfNotLoaded() {
+                 if (Object.keys(allCodesMap).length === 0) {
+                    try { const snapshot = await db.collection('codes').get(); snapshot.forEach(doc => allCodesMap[doc.id] = { ...doc.data(), id: doc.id }); } 
+                    catch (err) { console.error("Error pre-fetching codes:", err); }
+                }
+                if (Object.keys(allCoursesMap).length === 0) {
+                    try { const snapshot = await db.collection('courses').get(); snapshot.forEach(doc => allCoursesMap[doc.id] = { ...doc.data(), id: doc.id }); }
+                    catch (err) { console.error("Error pre-fetching courses:", err); }
                 }
             }
 
             async function fetchUserRequests(userId) {
-                show(userRequestsLoader);
-                userRequestsListDiv.innerHTML = '';
+                show(el.userRequestsLoader); el.userRequestsList.innerHTML = '';
                 try {
-                    await fetchCodesIfNotLoaded(); 
-
-                    const requestsSnapshot = await db.collection('requests')
-                        .where('userId', '==', userId)
-                        .orderBy('timestamp', 'desc')
-                        .get();
+                    await fetchCodesAndCoursesIfNotLoaded(); // Ensure maps are populated
+                    const [codeRequestsSnapshot, courseEnrollmentsSnapshot] = await Promise.all([
+                        db.collection('requests').where('userId', '==', userId).orderBy('timestamp', 'desc').get(),
+                        db.collection('courseEnrollments').where('userId', '==', userId).orderBy('timestamp', 'desc').get()
+                    ]);
+                    let allRequests = [];
+                    codeRequestsSnapshot.forEach(doc => allRequests.push({ ...doc.data(), type: 'Code', id: doc.id, itemId: doc.data().codeId }));
+                    courseEnrollmentsSnapshot.forEach(doc => allRequests.push({ ...doc.data(), type: 'Course', id: doc.id, itemId: doc.data().courseId }));
                     
-                    if (requestsSnapshot.empty) {
-                         userRequestsListDiv.innerHTML = '<p class="text-center">You have no purchase requests.</p>';
-                    } else {
-                        requestsSnapshot.forEach(doc => {
-                            const request = doc.data();
-                            const codeData = allCodesMap[request.codeId] || { title: 'Unknown Code', isPremium: false };
+                    allRequests.sort((a, b) => (b.timestamp && a.timestamp) ? b.timestamp.seconds - a.timestamp.seconds : 0);
 
-                            const itemDiv = document.createElement('div');
-                            itemDiv.className = 'requested-code-item';
-                            let actionHtml = ''; 
-
-                            if (request.status === 'approved') {
-                                actionHtml = `<span>Approved. Check "My Codes".</span>`;
-                            } else if (request.status === 'pending'){
-                                actionHtml = `<span>Reviewing...</span>`
-                            } else if (request.status === 'rejected'){
-                                actionHtml = `<span>Rejected. <a href="${telegramSupportLink}" target="_blank" class="btn btn-support btn-sm" style="margin-left: 5px; display: inline-block; padding: 0.3rem 0.6rem; font-size: 0.75rem;">Contact Support</a></span>`;
-                            } else {
-                                actionHtml = `<span>Status: ${request.status || 'N/A'}</span>` 
-                            }
-
-                            let premiumBadgeHtml = '';
-                            if (codeData.isPremium) {
-                                premiumBadgeHtml = '<span class="premium-badge" style="font-size:0.6rem; padding:0.2em 0.5em;">Premium</span>';
-                            }
-
-                            itemDiv.innerHTML = `
-                                <div>
-                                    <p><strong>Code:</strong> ${codeData.title} ${premiumBadgeHtml}</p>
-                                    <p><strong>UTR:</strong> ${request.utrNumber}</p>
-                                    <p><strong>Requested:</strong> ${request.timestamp ? new Date(request.timestamp.seconds * 1000).toLocaleDateString() : 'N/A'}</p>
-                                    <p><strong>Status:</strong> <span class="status-label status-${request.status || 'unknown'}">${request.status || 'Unknown'}</span></p>
-                                </div>
-                                <div class="mt-1" style="min-width: 150px; text-align: right;">
-                                   ${actionHtml}
-                                </div>
-                            `;
-                            userRequestsListDiv.appendChild(itemDiv);
+                    if (allRequests.length === 0) { el.userRequestsList.innerHTML = '<p class="text-center">You have no pending or processed requests.</p>'; }
+                    else {
+                        allRequests.forEach(req => {
+                            const itemData = req.type === 'Code' ? (allCodesMap[req.itemId] || { title: 'N/A' }) : (allCoursesMap[req.itemId] || { title: 'N/A' });
+                            const itemName = itemData.title;
+                            let actionHtml = '';
+                            if (req.status === 'approved') actionHtml = `Approved. Check "My ${req.type === 'Code' ? 'Codes' : 'Courses'}".`;
+                            else if (req.status === 'pending') actionHtml = `Payment under review...`;
+                            else if (req.status === 'rejected') actionHtml = `Rejected. <a href="${telegramSupportLink}" target="_blank" class="btn btn-support btn-sm" style="margin-left:5px;display:inline-block;padding:0.3rem 0.6rem;font-size:0.75rem;">Contact Support</a>`;
+                            else actionHtml = `Status: ${req.status || 'N/A'}`;
+                            
+                            const itemTypeColor = req.type === 'Code' ? 'var(--primary-color)' : 'var(--tertiary-color)';
+                            el.userRequestsList.innerHTML += `
+                                <div class="requested-code-item">
+                                    <div>
+                                        <p><strong style="color:${itemTypeColor};">${req.type}:</strong> ${itemName}</p>
+                                        <p><strong>UTR:</strong> ${req.utrNumber}</p>
+                                        <p><strong>Requested:</strong> ${req.timestamp ? new Date(req.timestamp.seconds * 1000).toLocaleDateString() : 'N/A'}</p>
+                                        <p><strong>Status:</strong> <span class="status-label status-${(req.status || 'unknown').toLowerCase().replace(/\s+/g, '_')}">${req.status || 'Unknown'}</span></p>
+                                    </div>
+                                    <div class="mt-1" style="min-width:150px;text-align:right;">${actionHtml}</div>
+                                </div>`;
                         });
                     }
-                } catch (error) {
-                    let userMessage = "Failed to load your requests. ";
-                    if (error.message && error.message.toLowerCase().includes("index")) {
-                        userMessage = "Error loading requests: The database needs a specific setup (an 'index') to process this request. Please go to your Firebase console and create the index mentioned in the error details. Error details: " + error.message;
-                    } else {
-                        userMessage += error.message;
-                    }
-                    showAlert(userMessage, 'error');
-                    userRequestsListDiv.innerHTML = `<p class="text-center">Error loading requests. Please ensure database indexes are set up if the error mentions them.</p>`;
-                } finally {
-                    hide(userRequestsLoader);
-                }
+                } catch (error) { showAlert("Failed to load your requests: " + error.message, 'error'); el.userRequestsList.innerHTML = `<p class="text-center">Error loading requests. Please try again.</p>`; }
+                finally { hide(el.userRequestsLoader); }
             }
 
             async function fetchMyPurchasedCodes(userId) {
-                show(myCodesLoader);
-                myCodesListDiv.innerHTML = '';
+                show(el.myCodesLoader); el.myCodesList.innerHTML = '';
                 try {
-                    await fetchCodesIfNotLoaded(); 
-                    await updateUserApprovedCodes(userId); 
-
-                    if (currentUserApprovedCodeIds.size === 0) {
-                        myCodesListDiv.innerHTML = '<p class="text-center">No approved codes yet. Once approved, codes appear here.</p>';
-                    } else {
+                    await fetchCodesAndCoursesIfNotLoaded(); await updateUserApprovedCodes(userId); // Make sure currentUserApprovedCodeIds is fresh
+                    
+                    if (currentUserApprovedCodeIds.size === 0) { el.myCodesList.innerHTML = '<p class="text-center">You have no purchased codes yet, or approvals are pending.</p>'; }
+                    else {
                         let codesDisplayed = 0;
                         currentUserApprovedCodeIds.forEach(codeId => {
                             const codeData = allCodesMap[codeId];
-                            if (codeData) { 
+                            if (codeData) {
                                 codesDisplayed++;
-                                const itemDiv = document.createElement('div');
-                                itemDiv.className = 'purchased-code-item code-card'; 
-                                
-                                let checkCodeButtonHtml = `<button class="btn btn-secondary check-code-btn" data-id="${codeData.id}">Check Code</button>`;
-                                
-                                let premiumBadgeHtml = '';
-                                if (codeData.isPremium) {
-                                    premiumBadgeHtml = '<span class="premium-badge">Premium</span>';
-                                }
-                                
-                                let cardScreenshotUrl = 'https://via.placeholder.com/350x180.png?text=Screenshot+N/A';
-                                if (codeData.screenshots && codeData.screenshots.length > 0 && codeData.screenshots[0]) {
-                                    cardScreenshotUrl = codeData.screenshots[0];
-                                } else if (codeData.screenshotURL) { 
-                                    cardScreenshotUrl = codeData.screenshotURL;
-                                }
-
-                                itemDiv.innerHTML = `
-                                    <div>
-                                        <img src="${cardScreenshotUrl}" alt="${codeData.title} Screenshot" class="screenshot">
-                                        <h3>${codeData.title} ${premiumBadgeHtml}</h3>
-                                        <p class="description">${codeData.description ? (codeData.description.substring(0,100) + (codeData.description.length > 100 ? '...' : '')) : 'No description.'}</p>
-                                    </div>
-                                    <div class="mt-1">
-                                        ${checkCodeButtonHtml}
-                                    </div>
-                                `;
-                                myCodesListDiv.appendChild(itemDiv);
+                                const screenshotUrl = (codeData.screenshots && codeData.screenshots.length > 0 && codeData.screenshots[0]) || codeData.screenshotURL || 'https://via.placeholder.com/350x180.png?text=N/A';
+                                const premiumBadgeHtml = codeData.isPremium ? '<span class="premium-badge">Premium</span>' : '';
+                                el.myCodesList.innerHTML += `
+                                    <div class="purchased-code-item code-card">
+                                        <div>
+                                            <img src="${screenshotUrl}" alt="${codeData.title}" class="screenshot">
+                                            <h3>${codeData.title} ${premiumBadgeHtml}</h3>
+                                            <p class="description">${(codeData.description || '').substring(0,100)}${(codeData.description || '').length > 100 ? '...' : ''}</p>
+                                        </div>
+                                        <div class="mt-1">
+                                            <button class="btn btn-secondary check-code-btn" data-id="${codeData.id}">View Details & Downloads</button>
+                                        </div>
+                                    </div>`;
                             }
                         });
+                        el.myCodesList.querySelectorAll('.check-code-btn').forEach(button => button.addEventListener('click', () => openCodeDetailsModal(button.dataset.id)));
+                        
+                        if(codesDisplayed === 0 && currentUserApprovedCodeIds.size > 0) el.myCodesList.innerHTML = '<p class="text-center">Could not retrieve details for some of your codes. Please try again later.</p>';
+                        else if (codesDisplayed === 0) el.myCodesList.innerHTML = '<p class="text-center">No approved codes found.</p>';
+                    }
+                } catch (error) { showAlert("Failed to load your purchased codes: " + error.message, 'error'); el.myCodesList.innerHTML = '<p class="text-center">Error loading your codes. Please try again.</p>'; }
+                finally { hide(el.myCodesLoader); }
+            }
 
-                        document.querySelectorAll('#myCodesList .check-code-btn').forEach(button => {
-                             button.addEventListener('click', function() {
-                                openCodeDetailsModal(this.dataset.id);
+            async function fetchMyEnrolledCourses(userId) {
+                show(el.myEnrolledCoursesLoader); el.myCoursesListing.innerHTML = '';
+                try {
+                    await fetchCodesAndCoursesIfNotLoaded(); 
+                    await updateUserEnrolledCourses(userId); // Ensures currentUserEnrolledCourseIds is fresh
+
+                    if (Object.keys(currentUserEnrolledCourseIds).length === 0) { 
+                        el.myCoursesListing.innerHTML = '<p class="text-center">You are not enrolled in any courses, or your enrollment is pending approval.</p>'; 
+                    } else {
+                        let coursesFound = 0;
+                        for (const enrollmentId in currentUserEnrolledCourseIds) {
+                            const enrollment = currentUserEnrolledCourseIds[enrollmentId];
+                            const course = allCoursesMap[enrollment.courseId];
+
+                            if (course && enrollment.status === 'approved') {
+                                coursesFound++;
+                                let contentHtml = '<h4>Course PDFs</h4><ul>';
+                                if (course.coursePdfs && course.coursePdfs.length > 0) {
+                                    course.coursePdfs.forEach(pdf => {
+                                        if (pdf.url) contentHtml += `<li>${pdf.name || 'Course PDF'} <a href="${pdf.url}" target="_blank" class="btn btn-sm btn-tertiary">Open PDF</a></li>`;
+                                    });
+                                } else {
+                                    contentHtml += '<li>No PDFs available for this course.</li>';
+                                }
+                                contentHtml += '</ul>';
+
+                                let certificateHtml = '<h4>Certificate & Marksheet</h4><ul>';
+                                const enrollmentEndDate = enrollment.enrollmentDate ? new Date(enrollment.enrollmentDate.seconds * 1000) : null;
+                                if (enrollmentEndDate && course.durationDays) {
+                                    enrollmentEndDate.setDate(enrollmentEndDate.getDate() + parseInt(course.durationDays));
+                                }
+                                const canDownloadCertAndMarksheet = enrollmentEndDate && new Date() >= enrollmentEndDate && enrollment.downloadsEnabled;
+                                
+                                let certDlInfo = "";
+                                if (enrollmentEndDate && new Date() < enrollmentEndDate) {
+                                    certDlInfo = `<span class="download-info">Certificate/Marksheet downloads will be available after ${enrollmentEndDate.toLocaleDateString()}.</span>`;
+                                } else if (enrollmentEndDate && new Date() >= enrollmentEndDate && !enrollment.downloadsEnabled) {
+                                    certDlInfo = `<span class="download-info">Downloads are pending admin approval.</span>`;
+                                } else if (!enrollmentEndDate) {
+                                     certDlInfo = `<span class="download-info">Enrollment date or course duration not set. Downloads unavailable.</span>`;
+                                }
+
+                                certificateHtml += `<li>Certificate: ${enrollment.certificateUrl ? `<a href="${enrollment.certificateUrl}" target="_blank" class="btn btn-sm btn-secondary" ${!canDownloadCertAndMarksheet ? 'disabled title="Download not yet enabled or available"' : ''}>Download Cert.</a>` : `<button class="btn btn-sm" disabled>Not Available</button>`}</li>`;
+                                certificateHtml += `<li>Marksheet: ${enrollment.marksheetUrl ? `<a href="${enrollment.marksheetUrl}" target="_blank" class="btn btn-sm btn-secondary" ${!canDownloadCertAndMarksheet ? 'disabled title="Download not yet enabled or available"' : ''}>Download Marksheet</a>` : `<button class="btn btn-sm" disabled>Not Available</button>`}</li>`;
+                                certificateHtml += `</ul>${certDlInfo}`;
+                                
+                                // Test Button Logic
+                                let testButtonHtml = '';
+                                if (course.questions && course.questions.length > 0) {
+                                    if (enrollment.testAttempted) {
+                                        testButtonHtml = `<button class="btn btn-sm btn-tertiary" disabled>Test Attempted</button>`;
+                                        if (enrollment.testPercentage !== null) {
+                                            testButtonHtml += ` <span style="font-size:0.9em; color: var(--text-muted-color)">(Score: ${enrollment.testPercentage.toFixed(2)}%)</span>`;
+                                        }
+                                    } else if (enrollment.resultStatus && (enrollment.resultStatus.toLowerCase() === 'pass' || enrollment.resultStatus.toLowerCase() === 'fail') ){
+                                        testButtonHtml = `<button class="btn btn-sm btn-tertiary" disabled>Result Declared</button>`;
+                                    }
+                                    else {
+                                        testButtonHtml = `<button class="btn btn-sm btn-tertiary start-test-btn" data-enrollment-id="${enrollment.enrollmentId}" data-course-id="${enrollment.courseId}" data-course-title="${course.title}">Start Test</button>`;
+                                    }
+                                } else {
+                                    testButtonHtml = `<span style="font-size:0.9em; color: var(--text-muted-color)">No test for this course.</span>`;
+                                }
+
+
+                                let resultStatusDisplay = 'N/A';
+                                let resultClass = 'result-pending';
+                                if(enrollment.resultStatus) {
+                                    resultStatusDisplay = enrollment.resultStatus.replace(/_/g, ' '); // e.g. test_submitted -> Test Submitted
+                                    resultClass = `result-${enrollment.resultStatus.toLowerCase().replace(/\s+/g, '_')}`;
+                                }
+
+                                el.myCoursesListing.innerHTML += `
+                                <div class="enrolled-course-item">
+                                    <h3>${course.title} <span class="course-result-status ${resultClass}">${resultStatusDisplay}</span></h3>
+                                    <p><strong>Enrolled:</strong> ${enrollment.enrollmentDate ? new Date(enrollment.enrollmentDate.seconds * 1000).toLocaleDateString() : 'Pending Approval'}</p>
+                                    <p><strong>Duration:</strong> ${course.durationDays || 'N/A'} days</p>
+                                    ${enrollmentEndDate ? `<p><strong>Course End Date (Approx):</strong> ${enrollmentEndDate.toLocaleDateString()}</p>` : ''}
+                                    ${(enrollment.percentage !== undefined && enrollment.percentage !== null) ? `<p><strong>Final Percentage:</strong> ${enrollment.percentage}%</p>`: ''}
+                                    
+                                    <div class="course-actions">
+                                        ${testButtonHtml}
+                                    </div>
+                                    <div class="course-content-pdfs">${contentHtml}</div>
+                                    <div class="course-certificates">${certificateHtml}</div>
+                                </div>`;
+                            }
+                        }
+                        if (coursesFound === 0) el.myCoursesListing.innerHTML = '<p class="text-center">No approved and active courses found for you at this time.</p>';
+                        
+                        // Add event listeners for the dynamically created start test buttons
+                        el.myCoursesListing.querySelectorAll('.start-test-btn').forEach(btn => {
+                            btn.addEventListener('click', (e) => {
+                                const { enrollmentId, courseId, courseTitle } = e.target.dataset;
+                                handleStartTestClick(enrollmentId, courseId, courseTitle);
                             });
                         });
 
-                        if(codesDisplayed === 0 && currentUserApprovedCodeIds.size > 0) { 
-                             myCodesListDiv.innerHTML = '<p class="text-center">Could not retrieve details for some purchased codes. Ensure `allCodesMap` is populated.</p>';
-                        } else if (codesDisplayed === 0) { 
-                            myCodesListDiv.innerHTML = '<p class="text-center">No approved codes found or details missing.</p>';
-                        }
                     }
-                } catch (error) {
-                    let userMessage = "Failed to load your purchased codes. ";
-                     if (error.message && error.message.toLowerCase().includes("index")) {
-                        userMessage = "Database error (missing index) while loading purchased codes. Error: " + error.message;
-                    } else {
-                        userMessage += error.message;
-                    }
-                    showAlert(userMessage, 'error');
-                    myCodesListDiv.innerHTML = '<p class="text-center">Error loading purchased codes.</p>';
-                } finally {
-                    hide(myCodesLoader);
+                } catch (error) { 
+                    console.error("Error fetching enrolled courses:", error);
+                    showAlert("Failed to load your enrolled courses: " + error.message, 'error'); 
+                    el.myCoursesListing.innerHTML = '<p class="text-center">Error loading your courses. Please try again.</p>'; 
                 }
-            }
-            
-            window.onclick = function(event) {
-                if (event.target.classList.contains('modal')) {
-                    closeModal(event.target.id);
-                }
+                finally { hide(el.myEnrolledCoursesLoader); }
             }
 
+            async function handleStartTestClick(enrollmentId, courseId, courseTitle) {
+                if (!auth.currentUser) { showAlert("Please login.", 'error'); openModal('loginModal'); return; }
+                if (await checkUserBanStatus(auth.currentUser.uid)) { showAlert("Account suspended.", 'error'); auth.signOut(); return; }
+                if (!currentUserProfile || !currentUserProfile.profileCompleted) {
+                    showAlert("Please complete your profile before starting the test.", 'error');
+                    pendingCourseTestAction = { enrollmentId, courseId, courseTitle };
+                    openUserProfileModal('initial_test'); return;
+                }
+                initiateCourseTest(enrollmentId, courseId, courseTitle);
+            }
+
+            function initiateCourseTest(enrollmentId, courseId, courseTitle) {
+                const course = allCoursesMap[courseId];
+                if (!course || !course.questions || course.questions.length === 0) {
+                    showAlert("No questions found for this course test.", "error");
+                    return;
+                }
+                currentTestEnrollmentId = enrollmentId; // Store for submission
+                el.courseTestModalTitle.textContent = `Test: ${courseTitle}`;
+                el.courseTestQuestionsContainer.innerHTML = ''; // Clear previous
+                
+                course.questions.forEach((q, index) => {
+                    const questionBlock = document.createElement('div');
+                    questionBlock.className = 'test-question-block';
+                    questionBlock.innerHTML = `
+                        <p class="question-text"><strong>Q${index + 1}:</strong> ${q.questionText}</p>
+                        <ul class="options-list">
+                            ${q.options.map((opt, optIndex) => `
+                                <li>
+                                    <label>
+                                        <input type="radio" name="question_${index}" value="${optIndex}" required>
+                                        ${opt}
+                                    </label>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    `;
+                    el.courseTestQuestionsContainer.appendChild(questionBlock);
+                });
+
+                openModal('courseTestModal');
+                startTestTimer(TEST_DURATION_MINUTES, enrollmentId);
+            }
+
+            function startTestTimer(durationMinutes, enrollmentIdForTimeout) {
+                if (courseTestTimerInterval) clearInterval(courseTestTimerInterval);
+                let timer = durationMinutes * 60;
+                el.courseTestTimerDisplay.textContent = formatTime(timer);
+
+                courseTestTimerInterval = setInterval(async () => {
+                    timer--;
+                    el.courseTestTimerDisplay.textContent = formatTime(timer);
+                    if (timer <= 0) {
+                        clearInterval(courseTestTimerInterval);
+                        courseTestTimerInterval = null;
+                        showAlert("Time's up! Your test will be submitted automatically.", "error");
+                        await handleTestSubmission(enrollmentIdForTimeout, 'timed_out');
+                        closeModal('courseTestModal');
+                    }
+                }, 1000);
+            }
+            
+            function formatTime(seconds) {
+                const m = Math.floor(seconds / 60);
+                const s = seconds % 60;
+                return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+            }
+
+            el.courseTestForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (courseTestTimerInterval) { // Only submit if timer is active
+                    clearInterval(courseTestTimerInterval);
+                    courseTestTimerInterval = null;
+                    await handleTestSubmission(currentTestEnrollmentId, 'submitted');
+                } else { // Timer already expired or an issue occurred
+                    showAlert("Cannot submit, test time might have expired or an error occurred.", "error");
+                }
+                closeModal('courseTestModal');
+            });
+
+            async function handleTestSubmission(enrollmentId, reason = 'submitted') {
+                if (!enrollmentId) {
+                    console.error("No enrollmentId for test submission.");
+                    showAlert("Error submitting test: Enrollment ID missing.", "error");
+                    return;
+                }
+                const enrollmentData = currentUserEnrolledCourseIds[enrollmentId];
+                if (!enrollmentData) {
+                     showAlert("Error submitting test: Enrollment data not found.", "error");
+                     return;
+                }
+                const courseId = enrollmentData.courseId;
+                const course = allCoursesMap[courseId];
+
+                if (!course || !course.questions || course.questions.length === 0) {
+                    showAlert("Error: Course or questions not found for scoring.", "error");
+                    return;
+                }
+
+                let correctAnswers = 0;
+                const totalQuestions = course.questions.length;
+                const userAnswers = [];
+
+                if (reason === 'submitted') { // Only collect answers if submitted by user
+                    for (let i = 0; i < totalQuestions; i++) {
+                        const selectedOption = el.courseTestForm.querySelector(`input[name="question_${i}"]:checked`);
+                        if (selectedOption) {
+                            const selectedIndex = parseInt(selectedOption.value);
+                            userAnswers.push({ questionIndex: i, selectedOptionIndex: selectedIndex });
+                            if (selectedIndex === course.questions[i].correctOptionIndex) {
+                                correctAnswers++;
+                            }
+                        } else {
+                             userAnswers.push({ questionIndex: i, selectedOptionIndex: null }); // Mark as unanswered
+                        }
+                    }
+                } else if (reason === 'timed_out_manual_close') { // If manually closed, treat as timed_out for result
+                    reason = 'timed_out';
+                }
+                // If 'timed_out' from timer, correctAnswers remains 0 unless partial submission logic is added
+
+                const scorePercentage = totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
+
+                const updateData = {
+                    testAttempted: true,
+                    testPercentage: scorePercentage,
+                    testCompletionDetails: {
+                        reason: reason,
+                        calculatedScorePercentage: scorePercentage,
+                        totalQuestions: totalQuestions,
+                        correctAnswers: correctAnswers,
+                        submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        answersGiven: userAnswers // Optional: store user's answers
+                    },
+                    resultStatus: reason === 'submitted' ? 'Test Submitted' : 'Timed Out'
+                };
+
+                try {
+                    await db.collection('courseEnrollments').doc(enrollmentId).update(updateData);
+                    if (reason === 'submitted') {
+                        showAlert(`Test submitted successfully! Your score: ${scorePercentage.toFixed(2)}%. Results pending admin review.`, "success");
+                    } else if (reason === 'timed_out') {
+                        showAlert(`Test time ended. Score: ${scorePercentage.toFixed(2)}%. Results pending admin review.`, "info");
+                    }
+                    await updateUserEnrolledCourses(auth.currentUser.uid); // Refresh local data
+                    if (!el.myCoursesPage.classList.contains('hidden')) {
+                        fetchMyEnrolledCourses(auth.currentUser.uid); // Refresh the view
+                    }
+                } catch (error) {
+                    console.error("Error updating test results:", error);
+                    showAlert("Failed to submit test results: " + error.message, "error");
+                }
+                el.courseTestForm.reset(); // Clear form for next time
+                currentTestEnrollmentId = null; // Reset
+            }
+
+
+            el.certificateVerificationForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const userIdToVerify = el.certificateVerificationForm.verifyUserId.value.trim();
+                const dobToVerify = el.certificateVerificationForm.verifyDob.value;
+                if (!userIdToVerify || !dobToVerify) { showAlert("User ID and Date of Birth are required.", "error"); return; }
+
+                show(el.verificationResultsLoader); hide(el.verificationResults); el.verificationResults.innerHTML = '';
+                try {
+                    await fetchCodesAndCoursesIfNotLoaded(); // Ensure course map is loaded
+                    const usersSnapshot = await db.collection('users')
+                        .where('userId', '==', userIdToVerify)
+                        .where('dateOfBirth', '==', dobToVerify)
+                        .limit(1).get();
+                    
+                    if (usersSnapshot.empty) { 
+                        el.verificationResults.innerHTML = '<p class="text-center">No user found with the provided User ID and Date of Birth.</p>'; 
+                        show(el.verificationResults); hide(el.verificationResultsLoader); return; 
+                    }
+                    
+                    const userData = usersSnapshot.docs[0].data();
+                    const userUid = usersSnapshot.docs[0].id; // This is Firebase Auth UID
+                    
+                    const enrollmentsSnapshot = await db.collection('courseEnrollments')
+                        .where('userId', '==', userUid) // Query by Firebase Auth UID
+                        .where('status', '==', 'approved')
+                        .get();
+                    
+                    if (enrollmentsSnapshot.empty) { 
+                        el.verificationResults.innerHTML = `<p class="text-center">User <strong>${userData.fullName || 'N/A'}</strong> (ID: ${userIdToVerify}) found, but has no approved course enrollments or declared results.</p>`; 
+                        show(el.verificationResults); hide(el.verificationResultsLoader); return; 
+                    }
+
+                    let resultsHtml = `<h4>Verification Results for User ID: ${userIdToVerify}</h4>`;
+                    let coursesFoundWithResult = 0;
+                    enrollmentsSnapshot.forEach(enrollmentDoc => {
+                        const enrollment = enrollmentDoc.data();
+                        const course = allCoursesMap[enrollment.courseId];
+                        if (course && enrollment.resultStatus && (enrollment.resultStatus.toLowerCase() === 'pass' || enrollment.resultStatus.toLowerCase() === 'fail')) {
+                            coursesFoundWithResult++;
+                            let statusClass = enrollment.resultStatus.toLowerCase() === 'pass' ? 'status-pass' : 'status-fail';
+                            resultsHtml += `
+                                <div class="result-item">
+                                    <p><strong>Full Name:</strong> ${userData.fullName || 'N/A'}</p>
+                                    <p><strong>Father's Name:</strong> ${userData.fatherName || 'N/A'}</p>
+                                    <p><strong>Course Title:</strong> ${course.title}</p>
+                                    <p><strong>Enrollment Date:</strong> ${enrollment.enrollmentDate ? new Date(enrollment.enrollmentDate.seconds * 1000).toLocaleDateString() : 'N/A'}</p>
+                                    <p><strong>Final Result:</strong> <span class="${statusClass}">${enrollment.resultStatus}</span></p>
+                                    ${(enrollment.percentage !== undefined && enrollment.percentage !== null) ? `<p><strong>Final Percentage:</strong> ${enrollment.percentage}%</p>` : ''}
+                                </div>`;
+                        }
+                    });
+                    if (coursesFoundWithResult === 0) {
+                         resultsHtml += `<p class="text-center">User <strong>${userData.fullName || 'N/A'}</strong> (ID: ${userIdToVerify}) has approved enrollments, but no courses with a 'Pass' or 'Fail' result declared yet.</p>`;
+                    }
+                    el.verificationResults.innerHTML = resultsHtml; show(el.verificationResults);
+                } catch (error) { 
+                    console.error("Certificate verification error:", error); 
+                    showAlert("Verification process encountered an error: " + error.message, "error"); 
+                    el.verificationResults.innerHTML = '<p class="text-center">An error occurred during verification. Please try again.</p>'; 
+                    show(el.verificationResults); 
+                }
+                finally { hide(el.verificationResultsLoader); }
+            });
+
+            // Event Listeners for Navigation
+            el.homeBtn.addEventListener('click', switchToHomeView);
+            el.loginBtn.addEventListener('click', () => openModal('loginModal'));
+            el.signupBtn.addEventListener('click', () => openModal('signupModal'));
+            el.dashboardBtn.addEventListener('click', switchToDashboardView);
+            el.myCodesBtn.addEventListener('click', switchToMyCodesView);
+            el.coursesHomeBtn.addEventListener('click', switchToCoursesHomeView);
+            el.myCoursesBtn.addEventListener('click', switchToMyCoursesView);
+            el.userProfileBtn.addEventListener('click', () => openUserProfileModal('edit'));
+            el.verifyCertificateBtn.addEventListener('click', switchToCertificateVerificationView);
+            el.logoutBtn.addEventListener('click', () => { auth.signOut().then(() => showAlert("You have been logged out.")); });
+
+
             return {
-                init: async () => { 
-                    if (!firebaseConfig.apiKey || firebaseConfig.apiKey.startsWith("AIzaSyA") && firebaseConfig.apiKey.length < 30) { 
-                         showAlert("Firebase configuration is missing or placeholder. App may not function.", "error");
-                         console.error("Firebase configuration is missing or incomplete.");
-                         document.getElementById('mainContentContainer').innerHTML = `<div class="container text-center" style="padding-top:5rem;"><p style="font-size:1.2rem; color:var(--secondary-color);">App config error. Contact support.</p></div>`;
+                init: async () => {
+                    if (!firebaseConfig.apiKey || firebaseConfig.apiKey.startsWith("AIzaSyA") && firebaseConfig.apiKey.length < 30) {
+                         showAlert("Firebase configuration error. The application may not function correctly.", "error");
+                         el.mainContentContainer.innerHTML = `<div class="container text-center" style="padding-top:5rem;"><p style="font-size:1.2rem; color:var(--secondary-color);">Application configuration error. Please contact support.</p></div>`;
                          return;
                     }
-                    await fetchConfigSettings(); 
-                    switchToHomeView(); 
+                    await fetchConfigSettings();
+                    await fetchCodesAndCoursesIfNotLoaded(); 
+                    // Auth state change will handle initial view loading
                 }
             };
         })();
 
         document.addEventListener('DOMContentLoaded', App.init);
-
-        const styleSheet = document.createElement("style");
-        styleSheet.type = "text/css";
-        styleSheet.innerText = `
-            @keyframes scaleDownModal {
-                from { opacity: 1; transform: scale(1) translateY(0); }
-                to { opacity: 0; transform: scale(0.8) translateY(25px); }
-            }
-        `;
-        document.head.appendChild(styleSheet);
     </script>
 </body>
 </html>
